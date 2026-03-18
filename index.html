@@ -184,38 +184,33 @@
         <button onclick="App.toggleLang()" class="text-[10px] font-bold border border-white/20 px-3 py-1 text-gray-400 hover:text-white rounded"><span id="lang-mobile">ES</span></button>
     </nav>
 
-    <nav class="md:hidden fixed bottom-0 left-0 w-full h-[65px] bg-[#050505] border-t border-white/10 z-50 flex items-center justify-around px-1 pb-safe">
-        <button onclick="App.navigate('home')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="home">
-            <i class="fa-solid fa-house text-lg mb-1"></i>
-            <span class="text-[8px] font-bold tracking-widest uppercase">Home</span>
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 w-full h-[65px] bg-[#050505] border-t border-white/10 z-50 flex items-center justify-around px-1 pb-safe transform translate-y-[200%] transition-transform duration-700 ease-out">
+        <button onclick="App.navigate('home')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-white transition-colors" data-target="home">
+            <i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[8px] font-bold tracking-widest uppercase">Home</span>
         </button>
         <button onclick="App.navigate('music')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="music">
-            <i class="fa-solid fa-compact-disc text-lg mb-1"></i>
-            <span class="text-[8px] font-bold tracking-widest uppercase">Catalog</span>
+            <i class="fa-solid fa-compact-disc text-lg mb-1"></i><span class="text-[8px] font-bold tracking-widest uppercase">Catalog</span>
         </button>
         <button onclick="App.navigate('requests')" class="nav-btn-mobile relative flex flex-col items-center justify-center w-16 h-full text-rude-yellow hover:text-white transition-colors group" data-target="requests">
             <div class="absolute inset-0 bg-rude-yellow blur-md opacity-10 group-hover:opacity-30 transition-opacity rounded-full"></div>
-            <i class="fa-solid fa-bolt text-xl mb-1 relative z-10 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]"></i>
-            <span class="text-[8px] font-bold tracking-widest uppercase relative z-10 text-white">VIP</span>
+            <i class="fa-solid fa-bolt text-xl mb-1 relative z-10 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]"></i><span class="text-[8px] font-bold tracking-widest uppercase relative z-10 text-white">VIP</span>
         </button>
         <button onclick="App.navigate('courses')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="courses">
-            <i class="fa-solid fa-graduation-cap text-lg mb-1"></i>
-            <span class="text-[8px] font-bold tracking-widest uppercase">Academy</span>
+            <i class="fa-solid fa-graduation-cap text-lg mb-1"></i><span class="text-[8px] font-bold tracking-widest uppercase">Academy</span>
         </button>
         <button onclick="App.toggleMobileMenu()" class="flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" id="mobile-more-btn">
-            <i class="fa-solid fa-bars text-lg mb-1"></i>
-            <span class="text-[8px] font-bold tracking-widest uppercase">More</span>
+            <i class="fa-solid fa-bars text-lg mb-1"></i><span class="text-[8px] font-bold tracking-widest uppercase">More</span>
         </button>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden flex-col justify-end pb-[65px] opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0a0a0a] border-t border-white/10 rounded-t-2xl p-6 transform translate-y-full transition-transform duration-300 ease-out" id="mobile-menu-sheet">
+    <div id="mobile-menu" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden flex-col justify-end pb-[160px] opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0a0a0a] border-t border-white/10 rounded-t-2xl p-6 transform translate-y-full transition-transform duration-300 ease-out shadow-[0_-10px_40px_rgba(0,0,0,0.8)]" id="mobile-menu-sheet">
             <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
             <div class="flex flex-col gap-4 text-xl font-display uppercase tracking-widest text-center">
-                <button onclick="App.navigate('gallery'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2">VISUALS</button>
-                <button onclick="App.navigate('tour'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2">TOUR DATES</button>
-                <button onclick="App.navigate('about'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2 border-b border-white/10 pb-4">BIOGRAPHY</button>
-                <button onclick="App.navigate('booking'); App.toggleMobileMenu();" class="text-rude-red py-2 mt-2">BOOKING</button>
+                <button onclick="App.navigate('gallery');" class="text-gray-400 hover:text-white py-2">VISUALS</button>
+                <button onclick="App.navigate('tour');" class="text-gray-400 hover:text-white py-2">TOUR DATES</button>
+                <button onclick="App.navigate('about');" class="text-gray-400 hover:text-white py-2 border-b border-white/10 pb-4">BIOGRAPHY</button>
+                <button onclick="App.navigate('booking');" class="text-rude-red py-2 mt-2">BOOKING</button>
             </div>
         </div>
     </div>
@@ -234,26 +229,25 @@
 
             <div class="h-full flex flex-col items-center justify-center relative p-6 z-10" id="hero-container">
                 <div class="text-center w-full max-w-4xl" id="hero-content">
-                    <div class="inline-block border border-white/20 px-3 py-1 bg-black/50 mb-3 gs-home">
-                        <p class="font-body tracking-[0.25em] text-white text-[9px] uppercase font-bold" data-en="FOUNDER OF RUDE BASS RECORDS" data-es="FUNDADOR DE RUDE BASS RECORDS">FOUNDER OF RUDE BASS RECORDS</p>
+                    <div class="inline-block border border-white/20 px-3 py-1 bg-black/50 mb-3 gs-home opacity-0">
+                        <p class="font-body tracking-[0.25em] text-white text-[9px] uppercase font-bold">FOUNDER OF RUDE BASS RECORDS</p>
                     </div>
                     
-                    <h1 class="font-display text-7xl md:text-[9rem] leading-[0.85] tracking-tighter m-0 gs-home text-white uppercase drop-shadow-2xl">
+                    <h1 class="font-display text-7xl md:text-[9rem] leading-[0.85] tracking-tighter m-0 gs-home opacity-0 text-white uppercase drop-shadow-2xl">
                         YOUNG <span class="text-rude-red">J.B</span>
                     </h1>
-                    <h2 class="font-display text-4xl md:text-[5rem] text-outline leading-none uppercase mt-1 gs-home">THE SELECTOR</h2>
+                    <h2 class="font-display text-4xl md:text-[5rem] text-outline leading-none uppercase mt-1 gs-home opacity-0">THE SELECTOR</h2>
                     
-                    <p class="font-body text-xs md:text-sm mt-6 text-gray-400 font-light max-w-md mx-auto gs-home leading-relaxed" data-en='Destroying the dancefloor with heavy bass and unmatched energy. "We are all part of a lost culture".' data-es='Destruyendo la pista de baile con bajos pesados y energía inigualable. "We are all part of a lost culture".'>
+                    <p class="font-body text-xs md:text-sm mt-6 text-gray-400 font-light max-w-md mx-auto gs-home opacity-0 leading-relaxed">
                         Destroying the dancefloor with heavy bass and unmatched energy. "We are all part of a lost culture".
                     </p>
                     
-                    <div class="mt-8 flex justify-center gs-home">
-                        <button onclick="App.navigate('music')" class="bg-white text-black font-display text-lg px-8 py-3 uppercase tracking-widest hover:bg-rude-red hover:text-white transition-colors duration-300" data-en="ENTER CATALOG" data-es="ENTRAR AL CATÁLOGO">
+                    <div class="mt-8 flex justify-center gs-home opacity-0">
+                        <button onclick="App.navigate('music')" class="bg-white text-black font-display text-lg px-8 py-3 uppercase tracking-widest hover:bg-rude-red hover:text-white transition-colors duration-300">
                             ENTER CATALOG
                         </button>
                     </div>
                 </div>
-            </div>
         </section>
 
         <section id="view-music" class="app-view">
@@ -443,51 +437,61 @@
     </main>
 
     <div class="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-2 md:pl-[14rem]">
-       <div id="global-player" class="fixed z-50 flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[220px] lg:left-[240px] md:right-8 pointer-events-none">
+       <div id="global-player" class="fixed z-[45] flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[12rem] md:right-4 pointer-events-none">
         
-            <div class="pointer-events-auto w-full max-w-[1200px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
-                
+            <div class="pointer-events-auto w-full max-w-[1400px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
                 <audio id="audio-engine" src="" preload="auto"></audio>
     
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gray-800 md:hidden">
-                    <div id="mobile-progress-fill" class="h-full bg-white w-0 relative transition-all duration-75"></div>
+                    <div id="mobile-progress-fill" class="h-full bg-rude-red w-0 relative transition-all duration-75"></div>
                 </div>
     
-                <div class="flex items-center gap-3 w-2/3 md:w-1/3 min-w-[120px] pl-1 md:pl-2">
-                    <div class="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-md md:rounded-full overflow-hidden border border-white/10 md:border-white/20">
-                        <img id="player-cover" src="https://placehold.co/100x100/000/333?text=JB" class="w-full h-full object-cover md:spin-slow spin-paused">
-                        <div class="hidden md:flex absolute inset-0 items-center justify-center"><div class="w-2 h-2 bg-black rounded-full border border-gray-700"></div></div>
+                <div class="flex items-center gap-3 w-auto md:w-1/4 min-w-[120px] pl-1 md:pl-2">
+                    <div class="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full overflow-hidden border border-white/10 md:border-white/20">
+                        <img id="player-cover" src="https://placehold.co/100x100/000/333?text=JB" class="w-full h-full object-cover spin-slow spin-paused">
+                        <div class="absolute inset-0 flex items-center justify-center"><div class="w-2 h-2 bg-black rounded-full border border-gray-700"></div></div>
                     </div>
                     <div class="overflow-hidden flex flex-col justify-center">
-                        <h4 id="player-title" class="font-bold text-sm md:text-sm text-white truncate">Select Track</h4>
-                        <p id="player-artist" class="text-[10px] md:text-[9px] text-gray-400 font-bold truncate uppercase tracking-widest mt-0.5">YOUNG J.B</p>
+                        <h4 id="player-title" class="font-bold text-sm md:text-xs text-white truncate">Select Track</h4>
+                        <p id="player-artist" class="text-[10px] md:text-[8px] text-gray-400 font-bold truncate uppercase tracking-widest mt-0.5">YOUNG J.B</p>
                     </div>
                 </div>
     
                 <div class="flex md:hidden items-center gap-4 pr-3" onclick="event.stopPropagation();">
-                    <button onclick="App.togglePlay()" class="text-white hover:scale-105 transition-all p-2">
+                    <button onclick="App.toggleLike()" class="text-gray-400 hover:text-white transition"><i id="mobile-like-btn" class="fa-regular fa-heart text-sm"></i></button>
+                    <button onclick="App.prevTrack()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-backward-step text-sm"></i></button>
+                    <button onclick="App.togglePlay()" class="text-white hover:scale-105 transition-all p-1">
                         <i class="fa-solid fa-play text-xl" id="play-icon-mobile"></i>
                     </button>
+                    <button onclick="App.nextTrack()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-forward-step text-sm"></i></button>
                 </div>
     
-                <div class="hidden md:flex flex-col items-center w-1/3 max-w-[400px] shrink-0 px-4">
+                <div class="hidden md:flex flex-col items-center w-2/4 max-w-[500px] shrink-0 px-4">
                     <div class="flex items-center gap-6 text-white mb-1.5">
-                        <button class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-backward-step text-sm"></i></button>
-                        <button onclick="App.togglePlay()" class="w-9 h-9 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 hover:bg-rude-red hover:text-white transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                            <i class="fa-solid fa-play ml-0.5 text-xs" id="play-icon"></i>
+                        <button onclick="App.toggleShuffle()" class="text-gray-500 hover:text-white transition"><i id="btn-shuffle" class="fa-solid fa-shuffle text-xs"></i></button>
+                        <button onclick="App.prevTrack()" class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-backward-step text-xs"></i></button>
+                        <button onclick="App.togglePlay()" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 hover:bg-rude-red hover:text-white transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                            <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
                         </button>
-                        <button class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-forward-step text-sm"></i></button>
+                        <button onclick="App.nextTrack()" class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-forward-step text-xs"></i></button>
+                        <button onclick="App.toggleRepeat()" class="text-gray-500 hover:text-white transition"><i id="btn-repeat" class="fa-solid fa-repeat text-xs"></i></button>
                     </div>
-                    <div class="w-full flex items-center gap-3 text-[10px] text-gray-500 font-mono">
+                    <div class="w-full flex items-center gap-3 text-[9px] text-gray-500 font-mono">
                         <span id="time-current">0:00</span>
-                        <input type="range" id="progress-bar" value="0" max="100" class="flex-1 accent-white hover:accent-rude-red h-1.5 cursor-pointer bg-gray-800 rounded-full transition-all">
+                        <input type="range" id="progress-bar" value="0" max="100" class="flex-1 accent-rude-red hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
                         <span id="time-total">--:--</span>
                     </div>
                 </div>
     
-                <div class="hidden md:flex justify-end items-center gap-3 w-1/3 pr-2">
-                    <button class="bg-transparent border border-white/20 text-white font-bold text-[9px] px-4 py-2 rounded-lg hover:bg-white hover:text-black transition-colors uppercase tracking-widest ml-4 shadow-sm">
-                        <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">GET</span>
+                <div class="hidden md:flex justify-end items-center gap-4 w-1/4 pr-2">
+                    <button onclick="App.toggleLike()" class="text-gray-400 hover:text-white transition"><i id="desktop-like-btn" class="fa-regular fa-heart text-sm"></i></button>
+                    <button onclick="App.openComments()" class="text-gray-400 hover:text-white transition"><i class="fa-regular fa-comment text-sm"></i></button>
+                    <button class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-share-nodes text-sm"></i></button>
+                    <div class="w-px h-4 bg-white/20 mx-1"></div>
+                    <i class="fa-solid fa-volume-low text-gray-500 text-[10px]"></i>
+                    <input type="range" id="volume-bar" value="80" max="100" class="w-16 accent-white hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
+                    <button class="bg-transparent border border-white/20 text-white font-bold text-[8px] px-3 py-1.5 rounded hover:bg-white hover:text-black transition-colors uppercase tracking-widest ml-2 shadow-sm">
+                        <i class="fa-solid fa-download"></i> <span class="hidden lg:inline">GET</span>
                     </button>
                 </div>
             </div>
@@ -496,19 +500,24 @@
         <div id="full-player" class="fixed inset-0 z-[200] bg-[#050505] flex-col pt-6 pb-8 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden overflow-hidden">
             
             <div class="flex justify-between items-center mb-6 shrink-0">
-                <button onclick="App.closeFullPlayer()" class="text-white text-xl p-2 -ml-2"><i class="fa-solid fa-chevron-down"></i></button>
-                <div class="bg-white/10 rounded-full flex text-[10px] font-bold uppercase tracking-wider p-1">
-                    <span class="bg-white/20 text-white px-4 py-1.5 rounded-full">Audio</span>
-                    <span class="text-gray-500 px-4 py-1.5 rounded-full">Video</span>
+                <button onclick="App.closeFullPlayer()" class="text-white text-2xl p-2 -ml-2"><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="bg-white/10 rounded-full flex text-[10px] font-bold uppercase tracking-wider p-1 cursor-pointer" onclick="App.toggleVideoMode()">
+                    <span id="tab-audio" class="bg-white/20 text-white px-4 py-1.5 rounded-full transition-all">Audio</span>
+                    <span id="tab-video" class="text-gray-500 px-4 py-1.5 rounded-full transition-all">Video</span>
                 </div>
                 <div class="flex gap-2">
-                    <button class="text-white text-lg p-2"><i class="fa-solid fa-cast"></i></button>
                     <button class="text-white text-lg p-2 -mr-2"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 </div>
             </div>
     
-            <div class="w-full flex-1 min-h-0 flex items-center justify-center mb-6 shrink">
-                <img id="fs-player-cover" src="https://placehold.co/500x500/000/333?text=JB" class="w-full max-h-full aspect-square object-cover rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
+            <div class="w-full flex-1 min-h-0 flex items-center justify-center mb-6 shrink relative">
+                <div id="fs-vinyl-container" class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-white/10 shadow-[0_0_50px_rgba(211,47,47,0.2)] transition-opacity duration-300">
+                    <img id="fs-player-cover" src="https://placehold.co/500x500/000/333?text=JB" class="w-full h-full object-cover spin-slow spin-paused">
+                    <div class="absolute inset-0 flex items-center justify-center"><div class="w-8 h-8 bg-[#050505] rounded-full border-2 border-gray-800"></div></div>
+                </div>
+                <div id="fs-video-container" class="absolute w-full aspect-video bg-black rounded-lg overflow-hidden hidden opacity-0 transition-opacity duration-300 border border-white/10">
+                    <iframe id="fs-yt-iframe" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
             </div>
     
             <div class="flex flex-col shrink-0 mb-6">
@@ -524,16 +533,16 @@
     
                 <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
                     <div class="flex bg-white/10 rounded-full items-center shrink-0">
-                        <button class="px-4 py-2 text-white border-r border-white/10 hover:bg-white/5 rounded-l-full transition-colors text-sm"><i class="fa-regular fa-thumbs-up mr-1.5"></i> 7.9k</button>
+                        <button onclick="App.toggleLike()" class="px-4 py-2 text-white border-r border-white/10 hover:bg-white/5 rounded-l-full transition-colors text-sm"><i id="fs-like-btn" class="fa-regular fa-heart mr-1.5"></i> Like</button>
                         <button class="px-4 py-2 text-white hover:bg-white/5 rounded-r-full transition-colors text-sm"><i class="fa-regular fa-thumbs-down"></i></button>
                     </div>
-                    <button class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-regular fa-comment"></i> 18</button>
+                    <button onclick="App.openComments()" class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-regular fa-comment"></i> 18</button>
                     <button class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-solid fa-share"></i> Share</button>
                 </div>
             </div>
     
             <div class="w-full shrink-0 mb-6 mt-auto">
-                <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full accent-white h-1 cursor-pointer bg-gray-600 rounded-full transition-all">
+                <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full accent-rude-red h-1.5 cursor-pointer bg-gray-600 rounded-full transition-all">
                 <div class="flex justify-between text-[11px] text-gray-400 font-mono mt-3 px-1">
                     <span id="fs-time-current">0:00</span>
                     <span id="fs-time-total">--:--</span>
@@ -541,13 +550,34 @@
             </div>
     
             <div class="flex justify-between items-center px-2 shrink-0 mb-2">
-                <button class="text-gray-400 text-xl hover:text-white transition-colors"><i class="fa-solid fa-shuffle"></i></button>
-                <button class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-backward-step"></i></button>
+                <button onclick="App.toggleShuffle()" class="text-gray-400 text-xl transition-colors"><i id="fs-btn-shuffle" class="fa-solid fa-shuffle"></i></button>
+                <button onclick="App.prevTrack()" class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-backward-step"></i></button>
                 <button onclick="App.togglePlay()" class="w-16 h-16 bg-white text-black rounded-full flex items-center justify-center shadow-xl active:scale-95 transition-transform">
                     <i class="fa-solid fa-play ml-1 text-2xl" id="fs-play-icon"></i>
                 </button>
-                <button class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-forward-step"></i></button>
-                <button class="text-gray-400 text-xl hover:text-white transition-colors"><i class="fa-solid fa-repeat"></i></button>
+                <button onclick="App.nextTrack()" class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-forward-step"></i></button>
+                <button onclick="App.toggleRepeat()" class="text-gray-400 text-xl transition-colors"><i id="fs-btn-repeat" class="fa-solid fa-repeat"></i></button>
+            </div>
+        </div>
+    
+        <div id="comments-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
+            <div class="bg-[#111] w-full h-[70vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300 ease-out" id="comments-sheet">
+                <div class="flex justify-between items-center p-5 border-b border-white/5">
+                    <h3 class="text-white font-display text-xl tracking-wide uppercase">Comments <span class="text-gray-500 text-sm ml-2">18</span></h3>
+                    <button onclick="App.closeComments()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-gray-800 shrink-0"></div>
+                        <div>
+                            <p class="text-xs text-gray-400 font-bold mb-1">@bass_head_99 <span class="font-normal text-gray-600 text-[10px] ml-2">2h ago</span></p>
+                            <p class="text-sm text-gray-200">This dubplate is absolutely massive! Need this for my set this weekend 🔥</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-white/5 bg-[#0a0a0a]">
+                    <input type="text" class="w-full bg-black border border-white/20 rounded-full px-4 py-2.5 text-white focus:outline-none focus:border-rude-red text-sm" placeholder="Add a comment...">
+                </div>
             </div>
         </div>
     </div>
@@ -571,24 +601,25 @@
     </div>
 
     <script>
+        // URL de tu backend en Cloudflare (Ajusta cuando despliegues el Worker)
+        const WORKER_URL = "https://tu-worker-url.workers.dev";
+        
         const AppState = {
-            currentView: 'home',
-            currentLang: 'en',
-            isPlaying: false,
-            data: null,
-            menuOpen: false
+            currentView: 'home', currentLang: 'en', isPlaying: false, data: null, menuOpen: false,
+            isVideoMode: false, isLiked: false, isShuffle: false, isRepeat: false, currentTrackIndex: 0
         };
 
         const MOCK_DATA = {
             tracks: [
-                { id: '1', title: 'Badman Fadwud (VIP Mix)', artist: 'Young J.B ft. El Jamaiquino', price: 4.99, isFree: false, duration: '3:45', coverUrl: 'https://images.unsplash.com/photo-1493225457224-eda0e6fd1463?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
-                { id: '2', title: 'Jungle Terror', artist: 'Young J.B', price: 0, isFree: true, duration: '4:12', coverUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
-                { id: '3', title: 'Midnight Groove', artist: 'Young J.B', price: 5.99, isFree: false, duration: '6:05', coverUrl: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
-                { id: '4', title: 'Rude Bass Anthem', artist: 'Young J.B', price: 2.99, isFree: false, duration: '5:30', coverUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', audioUrl: '' }
+                { id: '1', title: 'Badman Fadwud (VIP Mix)', artist: 'Young J.B ft. El Jamaiquino', price: 4.99, isFree: false, duration: '6:12', coverUrl: 'https://images.unsplash.com/photo-1493225457224-eda0e6fd1463?q=80&w=400&auto=format&fit=crop', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', ytId: 'jfKfPfyJRdk' },
+                { id: '2', title: 'Jungle Terror', artist: 'Young J.B', price: 0, isFree: true, duration: '7:05', coverUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=400&auto=format&fit=crop', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', ytId: '' },
+                { id: '3', title: 'Midnight Groove', artist: 'Young J.B', price: 5.99, isFree: false, duration: '6:05', coverUrl: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=400&auto=format&fit=crop', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', ytId: '' },
+                { id: '4', title: 'Rude Bass Anthem', artist: 'Young J.B', price: 2.99, isFree: false, duration: '5:30', coverUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=400&auto=format&fit=crop', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', ytId: '' }
             ],
             courses: [
                 { id: 'c1', title: 'Ragga House Pro', desc_en: 'Sound design, heavy bass, and track structuring for clubs. Learn the secrets of the underground sound.', desc_es: 'Diseño sonoro, bajos pesados y estructura para club. Aprende los secretos del sonido underground.', price: 199, imageUrl: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=600&auto=format&fit=crop', isAvailable: true },
-                { id: 'c2', title: 'Mix & Master', desc_en: 'Make your tracks sound huge and clean on any sound system.', desc_es: 'Haz que tus pistas suenen gigantes en cualquier sistema de sonido.', price: 89, imageUrl: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?q=80&w=600&auto=format&fit=crop', isAvailable: true }
+                { id: 'c2', title: 'Mix & Master', desc_en: 'Make your tracks sound huge and clean on any sound system.', desc_es: 'Haz que tus pistas suenen gigantes en cualquier sistema de sonido.', price: 89, imageUrl: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?q=80&w=600&auto=format&fit=crop', isAvailable: true },
+                { id: 'c3', title: 'Live Performance', desc_en: 'Advanced live mixing techniques and crowd reading.', desc_es: 'Técnicas avanzadas de mezcla en vivo y lectura del público.', price: 0, imageUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop', isAvailable: false }
             ],
             tour: [
                 { id: 'd1', date: '2026-10-25', title: 'Halloween Afterparty', location: 'Club Distrito, San José', ticketUrl: '#', isSoldOut: false },
@@ -597,23 +628,45 @@
             ],
             gallery: [
                 { id: 'g1', title: 'LIVE ACT', imageUrl: 'https://images.unsplash.com/photo-1516280440502-a2cebc005e8d?q=80&w=800&auto=format&fit=crop', type: 'image' },
-                { id: 'g2', title: 'MERCH', imageUrl: 'https://images.unsplash.com/photo-1523398002811-999aa8d9512e?q=80&w=800&auto=format&fit=crop', type: 'shop' },
-                { id: 'g3', title: 'STUDIO', imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop', type: 'image' }
+                { id: 'g2', title: 'MERCH COLLAB', imageUrl: 'https://images.unsplash.com/photo-1523398002811-999aa8d9512e?q=80&w=800&auto=format&fit=crop', type: 'shop' },
+                { id: 'g3', title: 'STUDIO VOL.4', imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop', type: 'image' }
             ]
         };
 
         const App = {
             audio: document.getElementById('audio-engine'),
-            coverImg: document.getElementById('player-cover'),
+            coverImg: document.querySelectorAll('#player-cover, #fs-player-cover'),
             
             async init() {
                 try {
-                    throw new Error("Simulando conexión..."); 
+                    // 1. Intentamos llamar a la red Edge de Cloudflare (Worker)
+                    const res = await fetch(`${WORKER_URL}?section=public_data`);
+                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+                    
+                    const dbData = await res.json();
+                    
+                    // 2. Mapeo de datos (Asegura estructura incluso si fallan partes de la DB)
+                    AppState.data = {
+                        tracks: dbData.tracks || MOCK_DATA.tracks,
+                        courses: dbData.courses || MOCK_DATA.courses,
+                        tour: dbData.tourDates || MOCK_DATA.tour,
+                        gallery: dbData.gallery || MOCK_DATA.gallery
+                    };
                 } catch (e) {
+                    // 3. Sistema de contingencia (Blindaje de UI)
+                    console.warn("🔌 API inaccesible. Activando modo offline (MOCK_DATA).", e.message);
                     AppState.data = MOCK_DATA;
                 } finally {
                     this.renderDynamicContent();
                     this.setupAudioListeners();
+                    
+                    // Cerrar "More Menu" al redimensionar a PC para evitar bugs visuales
+                    window.addEventListener('resize', () => {
+                        if (window.innerWidth >= 768 && AppState.menuOpen) {
+                            this.toggleMobileMenu(true); 
+                        }
+                    });
+
                     setTimeout(() => this.playIntroAnimation(), 500);
                 }
             },
@@ -621,7 +674,7 @@
             renderDynamicContent() {
                 const lang = AppState.currentLang;
 
-                // 1. Tracks (Lista compacta)
+                // 1. Tracks (Lista compacta de catálogo)
                 const tracklist = document.getElementById('tracklist-container');
                 if(tracklist && AppState.data.tracks) {
                     tracklist.innerHTML = AppState.data.tracks.map((t, i) => `
@@ -644,7 +697,8 @@
                     `).join('');
 
                     if(AppState.data.tracks.length > 0) {
-                        document.getElementById('main-catalog-cover').src = AppState.data.tracks[0].coverUrl;
+                        const mainCover = document.getElementById('main-catalog-cover');
+                        if (mainCover) mainCover.src = AppState.data.tracks[0].coverUrl;
                     }
                 }
 
@@ -652,11 +706,11 @@
                 const coursesContainer = document.getElementById('courses-container');
                 if(coursesContainer && AppState.data.courses) {
                     coursesContainer.innerHTML = AppState.data.courses.map(c => `
-                        <div onclick="App.openCourseModal('${c.id}')" class="sharp-border border border-white/10 bg-black flex flex-col group ${c.isAvailable ? 'cursor-pointer' : 'opacity-60'} transition-colors">
-                            <div class="relative h-40 overflow-hidden">
-                                ${!c.isAvailable ? `<div class="absolute inset-0 bg-black/80 z-10 flex items-center justify-center"><i class="fa-solid fa-lock text-2xl text-gray-600"></i></div>` : ''}
-                                <img src="${c.imageUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
-                                <h3 class="absolute bottom-2 left-2 font-display text-2xl text-white uppercase tracking-wide bg-black px-2 leading-none mix-blend-difference">${c.title}</h3>
+                        <div onclick="App.openCourseModal('${c.id}')" class="sharp-border border border-white/10 bg-black flex flex-col group ${c.isAvailable ? 'cursor-pointer hover:border-rude-red/50' : 'opacity-60 relative'} transition-all duration-500">
+                            <div class="relative h-48 overflow-hidden">
+                                ${!c.isAvailable ? `<div class="absolute inset-0 bg-black/80 z-10 flex items-center justify-center backdrop-blur-sm"><i class="fa-solid fa-lock text-3xl text-gray-600 drop-shadow-lg"></i></div>` : ''}
+                                <img src="${c.imageUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700">
+                                <h3 class="absolute bottom-3 left-3 font-display text-2xl text-white uppercase tracking-wide bg-black px-2 py-0.5 leading-none mix-blend-difference">${c.title}</h3>
                             </div>
                         </div>
                     `).join('');
@@ -672,18 +726,18 @@
                         const day = String(dateObj.getDate()).padStart(2, '0');
                         
                         return `
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border-b border-white/10 last:border-0 ${d.isSoldOut ? 'bg-white/5 opacity-50' : 'hover:bg-white/5 transition-colors group'}">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-white/10 last:border-0 ${d.isSoldOut ? 'bg-white/5 opacity-50' : 'hover:bg-white/5 transition-colors group'}">
                             <div class="flex items-center gap-4 mb-3 sm:mb-0">
-                                <div class="text-center w-10 shrink-0">
-                                    <p class="text-[9px] ${d.isSoldOut ? 'text-gray-500' : 'text-rude-red'} font-bold uppercase tracking-widest">${month}</p>
-                                    <p class="font-display text-2xl ${d.isSoldOut ? 'text-gray-500' : 'text-white group-hover:text-rude-red'} transition-colors leading-none">${day}</p>
+                                <div class="text-center w-12 shrink-0">
+                                    <p class="text-[10px] ${d.isSoldOut ? 'text-gray-500' : 'text-rude-red'} font-bold uppercase tracking-widest">${month}</p>
+                                    <p class="font-display text-3xl ${d.isSoldOut ? 'text-gray-500' : 'text-white group-hover:text-rude-red'} transition-colors leading-none">${day}</p>
                                 </div>
-                                <div class="pl-2 border-l border-white/10">
+                                <div class="pl-4 border-l border-white/10">
                                     <h4 class="text-base font-display uppercase tracking-wide leading-tight text-white">${d.title}</h4>
                                     <p class="text-gray-500 font-mono text-[9px] mt-0.5"><i class="fa-solid fa-location-dot ${d.isSoldOut ? '' : 'text-rude-yellow'} mr-1"></i> ${d.location}</p>
                                 </div>
                             </div>
-                            <button ${d.isSoldOut ? 'disabled' : ''} class="text-[9px] font-bold uppercase tracking-widest transition-colors ${d.isSoldOut ? 'text-gray-600' : 'text-white group-hover:text-rude-red'}" data-en="${d.isSoldOut ? 'SOLD OUT' : 'TICKETS'}" data-es="${d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS'}">${lang === 'en' ? (d.isSoldOut ? 'SOLD OUT' : 'TICKETS') : (d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS')}</button>
+                            <button ${d.isSoldOut ? 'disabled' : ''} class="w-full sm:w-auto text-[10px] font-bold uppercase tracking-widest transition-colors ${d.isSoldOut ? 'text-gray-600' : 'text-white group-hover:text-rude-red'}" data-en="${d.isSoldOut ? 'SOLD OUT' : 'TICKETS'}" data-es="${d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS'}">${lang === 'en' ? (d.isSoldOut ? 'SOLD OUT' : 'TICKETS') : (d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS')}</button>
                         </div>`;
                     }).join('');
                 }
@@ -710,7 +764,7 @@
                 this.updateUITexts();
             },
 
-            // --- Cursos Modal ---
+            // --- Modales ---
             openCourseModal(id) {
                 const course = AppState.data.courses.find(c => c.id === id);
                 if(!course || !course.isAvailable) return;
@@ -725,6 +779,7 @@
                 modal.classList.add('flex');
                 gsap.fromTo(modal.children[1], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3 });
             },
+
             closeCourseModal() {
                 const modal = document.getElementById('course-modal');
                 gsap.to(modal.children[1], { y: 20, opacity: 0, duration: 0.2, onComplete: () => {
@@ -733,25 +788,54 @@
                 }});
             },
 
+            openComments() {
+                const modal = document.getElementById('comments-modal');
+                const sheet = document.getElementById('comments-sheet');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                setTimeout(() => { modal.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
+            },
+
+            closeComments() {
+                const modal = document.getElementById('comments-modal');
+                const sheet = document.getElementById('comments-sheet');
+                modal.classList.add('opacity-0'); sheet.classList.add('translate-y-full');
+                setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+            },
+
+            openFullPlayer(e) {
+                if (window.innerWidth >= 768) return;
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.remove('hidden'); fsPlayer.classList.add('flex');
+                setTimeout(() => fsPlayer.classList.remove('translate-y-full'), 10);
+            },
+
+            closeFullPlayer() {
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.add('translate-y-full');
+                setTimeout(() => { fsPlayer.classList.add('hidden'); fsPlayer.classList.remove('flex'); }, 500);
+            },
+
+            // --- Animación Inicial & Navegación ---
             playIntroAnimation() {
                 const tl = gsap.timeline();
                 tl.to(".intro-logo", { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" })
                   .to("#enter-screen", { opacity: 0, duration: 0.5, delay: 0.5, display: 'none' })
                   .call(() => {
                       document.getElementById('global-player').classList.remove('translate-y-[200%]');
+                      const botNav = document.getElementById('mobile-bottom-nav');
+                      if(botNav) botNav.classList.remove('translate-y-[200%]');
+                      
                       gsap.fromTo(".gs-home", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" });
                   });
             },
 
-            // 1. Modificar navigate para colorear la barra inferior móvil
             navigate(targetId) {
                 if (AppState.currentView === targetId) return;
+                if (AppState.menuOpen) this.toggleMobileMenu(true); 
                 
-                // Desktop nav
                 document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
                 document.getElementById(`nav-${targetId}`)?.classList.add('active');
 
-                // Mobile Bottom Nav color
                 document.querySelectorAll('.nav-btn-mobile').forEach(el => {
                     el.classList.remove('text-white');
                     el.classList.add('text-gray-500');
@@ -774,9 +858,8 @@
                 }});
             },
 
-            // 2. Modificar toggleMobileMenu para el Bottom Sheet "More"
-            toggleMobileMenu() {
-                AppState.menuOpen = !AppState.menuOpen;
+            toggleMobileMenu(forceClose = false) {
+                AppState.menuOpen = forceClose ? false : !AppState.menuOpen;
                 const menu = document.getElementById('mobile-menu');
                 const sheet = document.getElementById('mobile-menu-sheet');
                 const icon = document.querySelector('#mobile-more-btn i');
@@ -784,19 +867,17 @@
                 if (AppState.menuOpen) {
                     menu.classList.remove('hidden');
                     menu.classList.add('flex');
-                    icon.classList.replace('fa-bars', 'fa-xmark');
-                    document.getElementById('mobile-more-btn').classList.replace('text-gray-500', 'text-white');
+                    icon?.classList.replace('fa-bars', 'fa-xmark');
+                    document.getElementById('mobile-more-btn')?.classList.replace('text-gray-500', 'text-white');
                     
-                    // Animación suave de entrada
                     setTimeout(() => {
                         menu.classList.remove('opacity-0');
                         sheet.classList.remove('translate-y-full');
                     }, 10);
                 } else {
-                    icon.classList.replace('fa-xmark', 'fa-bars');
-                    document.getElementById('mobile-more-btn').classList.replace('text-white', 'text-gray-500');
+                    icon?.classList.replace('fa-xmark', 'fa-bars');
+                    document.getElementById('mobile-more-btn')?.classList.replace('text-white', 'text-gray-500');
                     
-                    // Animación suave de salida
                     menu.classList.add('opacity-0');
                     sheet.classList.add('translate-y-full');
                     setTimeout(() => {
@@ -806,7 +887,7 @@
                 }
             },
 
-            // 3. Sincronizar Audio Listeners con el Full-Screen Player
+            // --- Lógica del Reproductor Musical ---
             setupAudioListeners() {
                 const progBar = document.getElementById('progress-bar');
                 const fsProgBar = document.getElementById('fs-progress-bar');
@@ -830,16 +911,25 @@
                 });
 
                 this.audio.addEventListener('ended', () => {
-                    this.togglePlay();
-                    progBar.value = 0; fsProgBar.value = 0; mobileProgFill.style.width = '0%';
+                    if(AppState.isRepeat) { 
+                        this.audio.currentTime = 0; 
+                        this.audio.play(); 
+                        return; 
+                    }
+                    this.nextTrack();
                 });
 
                 const seek = (e) => { if(this.audio.duration) this.audio.currentTime = (e.target.value / 100) * this.audio.duration; };
                 progBar.addEventListener('input', seek);
                 fsProgBar.addEventListener('input', seek);
             },
+            
+            formatTime(seconds) { 
+                let m = Math.floor(seconds / 60);
+                let s = Math.floor(seconds % 60).toString().padStart(2, '0');
+                return `${m}:${s}`; 
+            },
 
-            // 4. Sincronizar Botón de Play en ambas vistas
             togglePlay() {
                 const iconDesktop = document.getElementById('play-icon');
                 const iconMobile = document.getElementById('play-icon-mobile');
@@ -848,77 +938,163 @@
                 
                 if (AppState.isPlaying) {
                     this.audio.pause();
-                    iconDesktop.className = 'fa-solid fa-play ml-0.5 text-sm';
+                    iconDesktop.className = 'fa-solid fa-play ml-0.5 text-[10px]';
                     iconMobile.className = 'fa-solid fa-play text-xl';
                     iconFS.className = 'fa-solid fa-play ml-1 text-2xl';
                     eq?.classList.add('paused');
-                    this.coverImg.classList.add('spin-paused');
+                    this.coverImg.forEach(img => img.classList.add('spin-paused'));
                 } else {
                     if(this.audio.src === '' || this.audio.src.includes(window.location.host)) {
                         if(AppState.data.tracks && AppState.data.tracks.length > 0) this.loadTrack(AppState.data.tracks[0].id, false);
                     }
-                    this.audio.play().catch(e => console.log("Autoplay prevent", e));
-                    iconDesktop.className = 'fa-solid fa-pause text-sm';
+                    this.audio.play().catch(e => console.log("Autoplay prevented", e));
+                    iconDesktop.className = 'fa-solid fa-pause text-[10px]';
                     iconMobile.className = 'fa-solid fa-pause text-xl';
                     iconFS.className = 'fa-solid fa-pause text-2xl';
                     eq?.classList.remove('paused');
-                    this.coverImg.classList.remove('spin-paused');
+                    this.coverImg.forEach(img => img.classList.remove('spin-paused'));
                 }
                 AppState.isPlaying = !AppState.isPlaying;
             },
 
-            // 5. Cargar Track sincronizado en ambas portadas
             loadTrack(id, autoPlay = true) {
-                const track = AppState.data.tracks.find(t => t.id === id);
-                if(!track) return;
+                const trackIndex = AppState.data.tracks.findIndex(t => t.id === id);
+                if(trackIndex === -1) return;
+                AppState.currentTrackIndex = trackIndex;
+                const track = AppState.data.tracks[trackIndex];
 
                 document.getElementById('player-title').textContent = track.title;
                 document.getElementById('player-artist').textContent = track.artist;
                 document.getElementById('fs-player-title').textContent = track.title;
                 document.getElementById('fs-player-artist').textContent = track.artist;
                 
-                this.coverImg.src = track.coverUrl;
-                document.getElementById('fs-player-cover').src = track.coverUrl;
+                this.coverImg.forEach(img => {
+                    img.src = track.coverUrl;
+                    img.style.animation = 'none'; 
+                    img.offsetHeight; 
+                    img.style.animation = null; 
+                    img.classList.add('spin-paused');
+                });
                 
                 const mainCover = document.getElementById('main-catalog-cover');
                 if(mainCover) mainCover.src = track.coverUrl;
                 
-                this.coverImg.style.animation = 'none'; this.coverImg.offsetHeight; this.coverImg.style.animation = null; this.coverImg.classList.add('spin-paused');
+                // Cargar Audio Real y Video Youtube (Si existe)
+                this.audio.src = track.audioUrl;
+                const ytIframe = document.getElementById('fs-yt-iframe');
+                if(track.ytId) { 
+                    ytIframe.src = `https://www.youtube.com/embed/${track.ytId}?autoplay=0&controls=0&modestbranding=1`; 
+                } else { 
+                    ytIframe.src = ""; 
+                    this.toggleVideoMode(false); // Forzar a modo audio si no hay video
+                }
                 
-                if(autoPlay && !AppState.isPlaying) this.togglePlay();
-                else if (autoPlay && AppState.isPlaying) { this.audio.play(); this.coverImg.classList.remove('spin-paused'); }
+                if(autoPlay) {
+                    AppState.isPlaying = false; // Reset to force play toggle
+                    this.togglePlay();
+                }
             },
 
-            // 6. NUEVAS FUNCIONES: Pantalla Completa Reproductor
-            openFullPlayer(e) {
-                if (window.innerWidth >= 768) return; // Solo funciona en móvil
-                const fsPlayer = document.getElementById('full-player');
-                fsPlayer.classList.remove('hidden');
-                fsPlayer.classList.add('flex');
-                
-                // Timeout para permitir que el display:flex renderice antes de transformar
-                setTimeout(() => {
-                    fsPlayer.classList.remove('translate-y-full');
-                }, 10);
+            nextTrack() {
+                let nextIdx = AppState.isShuffle 
+                    ? Math.floor(Math.random() * AppState.data.tracks.length) 
+                    : (AppState.currentTrackIndex + 1) % AppState.data.tracks.length;
+                this.loadTrack(AppState.data.tracks[nextIdx].id, true);
             },
 
-            closeFullPlayer() {
-                const fsPlayer = document.getElementById('full-player');
-                fsPlayer.classList.add('translate-y-full');
-                
-                // Esperar a que baje para ocultarlo
-                setTimeout(() => {
-                    fsPlayer.classList.add('hidden');
-                    fsPlayer.classList.remove('flex');
-                }, 500);
+            prevTrack() {
+                let prevIdx = (AppState.currentTrackIndex - 1 + AppState.data.tracks.length) % AppState.data.tracks.length;
+                this.loadTrack(AppState.data.tracks[prevIdx].id, true);
             },
 
+            // --- Interactividad Extra del Player ---
+            toggleLike() {
+                AppState.isLiked = !AppState.isLiked;
+                const btnDesktop = document.getElementById('desktop-like-btn');
+                const btnMobile = document.getElementById('mobile-like-btn');
+                const btnFS = document.getElementById('fs-like-btn');
+                
+                const toggleClass = (btn) => {
+                    if(!btn) return;
+                    if(AppState.isLiked) { 
+                        btn.classList.replace('fa-regular', 'fa-solid'); 
+                        btn.classList.add('text-rude-red'); 
+                    } else { 
+                        btn.classList.replace('fa-solid', 'fa-regular'); 
+                        btn.classList.remove('text-rude-red'); 
+                    }
+                };
+                toggleClass(btnDesktop); toggleClass(btnMobile); toggleClass(btnFS);
+            },
+
+            toggleShuffle() {
+                AppState.isShuffle = !AppState.isShuffle;
+                const b1 = document.getElementById('btn-shuffle'); 
+                const b2 = document.getElementById('fs-btn-shuffle');
+                if(AppState.isShuffle) { 
+                    b1?.classList.add('text-rude-red'); 
+                    b2?.classList.add('text-white'); 
+                    b2?.classList.remove('text-gray-400');
+                } else { 
+                    b1?.classList.remove('text-rude-red'); 
+                    b2?.classList.remove('text-white'); 
+                    b2?.classList.add('text-gray-400');
+                }
+            },
+
+            toggleRepeat() {
+                AppState.isRepeat = !AppState.isRepeat;
+                const b1 = document.getElementById('btn-repeat'); 
+                const b2 = document.getElementById('fs-btn-repeat');
+                if(AppState.isRepeat) { 
+                    b1?.classList.add('text-rude-red'); 
+                    b2?.classList.add('text-white'); 
+                    b2?.classList.remove('text-gray-400');
+                } else { 
+                    b1?.classList.remove('text-rude-red'); 
+                    b2?.classList.remove('text-white'); 
+                    b2?.classList.add('text-gray-400');
+                }
+            },
+
+            toggleVideoMode(forceAudio = null) {
+                if(forceAudio !== null) AppState.isVideoMode = !forceAudio;
+                else AppState.isVideoMode = !AppState.isVideoMode;
+
+                const tabAudio = document.getElementById('tab-audio');
+                const tabVideo = document.getElementById('tab-video');
+                const vinyl = document.getElementById('fs-vinyl-container');
+                const video = document.getElementById('fs-video-container');
+
+                if (AppState.isVideoMode) {
+                    tabAudio.className = "text-gray-500 px-4 py-1.5 rounded-full transition-all";
+                    tabVideo.className = "bg-white/20 text-white px-4 py-1.5 rounded-full transition-all";
+                    vinyl.classList.add('opacity-0'); 
+                    setTimeout(() => { 
+                        vinyl.classList.add('hidden'); 
+                        video.classList.remove('hidden'); 
+                        setTimeout(() => video.classList.remove('opacity-0'), 50); 
+                    }, 300);
+                } else {
+                    tabVideo.className = "text-gray-500 px-4 py-1.5 rounded-full transition-all";
+                    tabAudio.className = "bg-white/20 text-white px-4 py-1.5 rounded-full transition-all";
+                    video.classList.add('opacity-0'); 
+                    setTimeout(() => { 
+                        video.classList.add('hidden'); 
+                        vinyl.classList.remove('hidden'); 
+                        setTimeout(() => vinyl.classList.remove('opacity-0'), 50); 
+                    }, 300);
+                }
+            },
+
+            // --- Formularios y Traducciones ---
             toggleLang() {
                 AppState.currentLang = AppState.currentLang === 'en' ? 'es' : 'en';
                 const label = AppState.currentLang === 'en' ? 'ES' : 'EN';
                 document.getElementById('lang-desktop').innerText = label;
                 document.getElementById('lang-mobile').innerText = label;
-                this.renderDynamicContent(); 
+                this.updateUITexts();
+                this.renderDynamicContent(); // Re-renderiza para aplicar textos anclados a variables
             },
 
             updateUITexts() {
@@ -933,23 +1109,25 @@
 
             selectTip(btn) {
                 document.querySelectorAll('.tip-btn').forEach(el => {
-                    el.classList.remove('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'shadow-[0_0_15px_rgba(250,204,21,0.2)]');
-                    el.classList.add('border-white/10', 'bg-black', 'text-gray-400');
+                    el.classList.remove('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'scale-105', 'shadow-[0_0_15px_rgba(250,204,21,0.3)]');
+                    el.classList.add('border-white/10', 'bg-black/50', 'text-gray-400');
                 });
-                btn.classList.remove('border-white/10', 'bg-black', 'text-gray-400');
-                btn.classList.add('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'shadow-[0_0_15px_rgba(250,204,21,0.2)]');
+                btn.classList.remove('border-white/10', 'bg-black/50', 'text-gray-400');
+                btn.classList.add('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'scale-105', 'shadow-[0_0_15px_rgba(250,204,21,0.3)]');
             },
-            
+
             submitRequest(btn) {
                 const originalText = AppState.currentLang === 'es' ? 'ENVIAR A CABINA' : 'SEND TO BOOTH';
                 btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
                 setTimeout(() => {
                     btn.innerHTML = '<i class="fa-solid fa-check"></i>';
-                    btn.classList.replace('bg-white', 'bg-green-500'); btn.classList.replace('text-black', 'text-white');
+                    btn.classList.replace('bg-white', 'bg-green-500'); 
+                    btn.classList.replace('text-black', 'text-white');
                     setTimeout(() => {
                         document.getElementById('request-form').reset();
                         btn.innerHTML = originalText;
-                        btn.classList.replace('bg-green-500', 'bg-white'); btn.classList.replace('text-white', 'text-black');
+                        btn.classList.replace('bg-green-500', 'bg-white'); 
+                        btn.classList.replace('text-white', 'text-black');
                     }, 2000);
                 }, 1000);
             },
@@ -959,15 +1137,18 @@
                 setTimeout(() => {
                     document.getElementById('contact-form').classList.add('hidden');
                     const successMsg = document.getElementById('booking-success');
-                    successMsg.classList.remove('hidden'); successMsg.classList.add('flex');
-                    btn.innerHTML = AppState.currentLang === 'es' ? 'SEND REQUEST' : 'SEND REQUEST';
+                    successMsg.classList.remove('hidden'); 
+                    successMsg.classList.add('flex');
+                    btn.innerHTML = AppState.currentLang === 'es' ? 'SOLICITAR FECHA' : 'REQUEST DATE';
                 }, 1000);
             },
 
             resetForm(successId, formId) {
-                document.getElementById(successId).classList.add('hidden'); document.getElementById(successId).classList.remove('flex');
+                document.getElementById(successId).classList.add('hidden'); 
+                document.getElementById(successId).classList.remove('flex');
                 const form = document.getElementById(formId);
-                form.classList.remove('hidden'); form.reset();
+                form.classList.remove('hidden'); 
+                form.reset();
             }
         };
 
