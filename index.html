@@ -505,8 +505,8 @@
             </div>
         </div>
     
-        <div id="full-player" class="fixed inset-0 z-[200] bg-[#050505] flex-col pt-6 pb-8 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden overflow-hidden">
-            
+        <div id="full-player" class="pointer-events-auto fixed inset-0 z-[200] bg-[#050505] flex-col pt-6 pb-8 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden overflow-hidden">
+        
             <div class="flex justify-between items-center mb-6 shrink-0">
                 <button onclick="App.closeFullPlayer()" class="text-white text-2xl p-2 -ml-2"><i class="fa-solid fa-chevron-down"></i></button>
                 <div class="bg-white/10 rounded-full flex text-[10px] font-bold uppercase tracking-wider p-1 cursor-pointer" onclick="App.toggleVideoMode()">
@@ -565,11 +565,11 @@
             </div>
         </div>
     
-        <div id="comments-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
-            <div class="bg-[#111] w-full h-[70vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300 ease-out" id="comments-sheet">
+        <div id="comments-modal" class="pointer-events-auto fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300" onclick="if(event.target === this) App.closeComments()">
+            <div class="bg-[#111] w-full h-[70vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300 ease-out" id="comments-sheet" onclick="event.stopPropagation()">
                 <div class="flex justify-between items-center p-5 border-b border-white/5 shrink-0">
                     <h3 class="text-white font-display text-xl tracking-wide uppercase">Comments</h3>
-                    <button onclick="App.closeComments()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    <button onclick="App.closeComments()" class="text-gray-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 
                 <div class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar" id="comments-list">
