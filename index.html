@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YOUNG J.B DJ | The Sonic Engineer</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'display': ['Anton', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'rude-black': '#030303',
+                        'rude-panel': '#0a0a0a',
+                        'rude-red': '#D32F2F',
+                        'rude-yellow': '#FACC15',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: theme('colors.rude-black');
+            color: white;
+            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 13px; /* Escala reducida para que quepa más contenido */
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background-color: #333; }
+        ::-webkit-scrollbar-thumb:hover { background-color: theme('colors.rude-red'); }
+
+        /* --- Texturas y Fondos (Limpios) --- */
+        .noise-bg {
+            position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- Marquee Animation (Home) --- */
+        .marquee-wrapper {
+            position: absolute; top: 50%; left: 0; width: 100vw; transform: translateY(-50%) rotate(-3deg);
+            overflow: hidden; white-space: nowrap; z-index: 0; opacity: 0.08; pointer-events: none;
+        }
+        .marquee-content {
+            display: inline-block; font-family: 'Anton', sans-serif; font-size: 10rem;
+            color: transparent; -webkit-text-stroke: 2px white; animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- Tipografía brutalista --- */
+        .text-outline { color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.8); transition: color 0.3s ease; }
+        .text-outline:hover { color: white; -webkit-text-stroke: 2px white; text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+
+        /* --- Vistas SPA --- */
+        .app-view {
+            position: absolute; inset: 0; visibility: hidden; opacity: 0; overflow-y: auto; overflow-x: hidden;
+            padding-bottom: 120px; z-index: 5;
+        }
+        .app-view.active { visibility: visible; opacity: 1; z-index: 10; }
+
+        /* --- Animación Ecualizador --- */
+        .equalizer { display: flex; align-items: flex-end; height: 14px; gap: 2px; }
+        .equalizer span { width: 3px; background-color: theme('colors.rude-red'); animation: eq-bounce 0.4s infinite alternate ease-in-out; }
+        .equalizer.paused span { animation-play-state: paused; height: 2px !important; }
+        .equalizer span:nth-child(1) { animation-delay: 0.1s; height: 40%; }
+        .equalizer span:nth-child(2) { animation-delay: 0.3s; height: 80%; }
+        .equalizer span:nth-child(3) { animation-delay: 0.0s; height: 100%; }
+        @keyframes eq-bounce { 0% { height: 20%; } 100% { height: 100%; } }
+
+        /* --- Slider Custom --- */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 10px; width: 10px; border-radius: 50%; background: white; cursor: pointer; margin-top: -4px; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; background: rgba(255,255,255,0.2); }
+
+        /* --- Masonry Grid --- */
+        .masonry-grid { column-count: 1; column-gap: 1rem; }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        .masonry-item { break-inside: avoid; margin-bottom: 1rem; }
+
+        /* --- Estilos Especiales --- */
+        .sharp-border { border: 1px solid rgba(255,255,255,0.1); border-radius: 0; }
+        .sharp-border:hover { border-color: theme('colors.rude-red'); }
+        
+        .yt-track-list { max-height: 40vh; overflow-y: auto; padding-right: 8px; }
+        .yt-track-item .track-num { display: block; }
+        .yt-track-item .track-play { display: none; color: white; }
+        .yt-track-item:hover .track-num { display: none; }
+        .yt-track-item:hover .track-play { display: block; }
+        .yt-track-item:hover { background-color: rgba(255,255,255,0.05); }
+
+        /* Carrusel Modal */
+        .carousel-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .carousel-item { flex: 0 0 100%; scroll-snap-align: start; }
+        
+        /* --- Navegación Desktop (Sin línea, solo esplendor) --- */
+        .nav-item { position: relative; transition: all 0.3s ease; display: block; width: 100%; text-align: left; padding: 4px 0; }
+        
+        .nav-item.active { 
+            color: theme('colors.rude-yellow'); 
+            transform: translateX(8px); 
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.6); 
+            letter-spacing: 0.2em; 
+        }
+        
+        .nav-item:hover:not(.active) { 
+            color: white; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.3); 
+            transform: translateX(4px); /* Sutil empuje al pasar el cursor */
+        }
+    </style>
+</head>
+<body class="bg-rude-black text-white h-screen w-screen flex relative antialiased">
+
+    <div class="noise-bg"></div>
+
+    <div id="enter-screen" class="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center">
+        <div class="absolute w-96 h-96 bg-rude-red rounded-full blur-[120px] opacity-30 animate-pulse"></div>
+        <div class="intro-logo scale-50 opacity-0 text-center relative z-10">
+            <h1 class="font-display text-6xl md:text-[8rem] text-outline leading-none uppercase tracking-tighter cursor-default">YOUNG J.B</h1>
+            <p class="font-body text-white tracking-[0.4em] mt-2 text-[10px] md:text-xs uppercase font-bold" data-en="LOADING SYSTEM" data-es="CARGANDO SISTEMA">LOADING SYSTEM</p>
+            <div class="mt-8 w-32 h-px bg-white/20 mx-auto overflow-hidden">
+                <div class="h-full bg-rude-red w-full origin-left animate-[scale-x_1.5s_ease-out]"></div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="App.toggleLang()" class="hidden md:flex fixed top-6 right-8 z-[60] bg-black border border-white/10 px-4 py-1.5 font-bold text-[9px] tracking-widest hover:border-white transition-colors items-center gap-2 group">
+        <i class="fa-solid fa-language text-gray-500 group-hover:text-white transition-colors"></i> <span id="lang-desktop">ES</span>
+    </button>
+
+    <nav class="hidden md:flex flex-col w-48 lg:w-52 bg-black h-full border-r border-white/10 p-5 relative z-50 shrink-0 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
+        <div class="mb-6">
+            <h2 class="font-display text-3xl text-white leading-none uppercase tracking-wide">YOUNG<br><span class="text-rude-red">J.B</span></h2>
+            <div class="w-8 h-1 bg-rude-yellow mt-3"></div>
+        </div>
+
+        <ul class="flex flex-col gap-3 font-display text-lg text-gray-500 uppercase tracking-widest mt-1">
+            <li><button onclick="App.navigate('home')" id="nav-home" class="nav-item active w-full text-left" data-en="HOME" data-es="INICIO">HOME</button></li>
+            <li><button onclick="App.navigate('music')" id="nav-music" class="nav-item w-full text-left" data-en="CATALOG" data-es="CATÁLOGO">CATALOG</button></li>
+            <li><button onclick="App.navigate('courses')" id="nav-courses" class="nav-item w-full text-left" data-en="ACADEMY" data-es="ACADEMIA">ACADEMY</button></li>
+            <li><button onclick="App.navigate('gallery')" id="nav-gallery" class="nav-item w-full text-left" data-en="VISUALS" data-es="VISUALES">VISUALS</button></li>
+            <li><button onclick="App.navigate('tour')" id="nav-tour" class="nav-item w-full text-left" data-en="TOUR" data-es="TOUR">TOUR</button></li>
+            <li><button onclick="App.navigate('about')" id="nav-about" class="nav-item w-full text-left" data-en="BIOGRAPHY" data-es="BIOGRAFÍA">BIOGRAPHY</button></li>
+        </ul>
+
+        <div class="mt-auto space-y-3 pb-2">
+            <button onclick="App.navigate('requests')" id="nav-requests" class="w-full bg-rude-yellow text-black py-2.5 px-3 font-display text-sm uppercase tracking-widest border-2 border-transparent shadow-[3px_3px_0px_#D32F2F] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[1px_1px_0px_#D32F2F] active:shadow-none active:translate-y-[3px] active:translate-x-[3px] transition-all flex items-center justify-center gap-2 group">
+                <i class="fa-solid fa-bolt text-rude-red group-hover:animate-pulse"></i> 
+                <span data-en="VIP REQUEST" data-es="PETICIÓN VIP">VIP REQUEST</span>
+            </button>
+            
+            <button onclick="App.navigate('booking')" id="nav-booking" class="w-full bg-black text-white py-2.5 px-3 font-display text-sm uppercase tracking-widest border-2 border-white/20 shadow-[3px_3px_0px_rgba(255,255,255,0.2)] hover:bg-white hover:text-black hover:border-white hover:shadow-[3px_3px_0px_#D32F2F] hover:translate-y-[2px] hover:translate-x-[2px] active:shadow-none active:translate-y-[3px] active:translate-x-[3px] transition-all flex items-center justify-center">
+                <span data-en="BOOKING" data-es="BOOKING">BOOKING</span>
+            </button>
+        </div>
+    </nav>
+
+    <nav class="md:hidden fixed top-0 left-0 w-full h-14 bg-black/90 backdrop-blur-md border-b border-white/5 z-40 flex items-center justify-between px-4">
+        <h2 class="font-display text-2xl text-white leading-none">Y<span class="text-rude-red">JB</span></h2>
+        <button onclick="App.toggleLang()" class="text-[10px] font-bold border border-white/20 px-3 py-1 text-gray-400 hover:text-white rounded"><span id="lang-mobile">ES</span></button>
+    </nav>
+
+    <nav class="md:hidden fixed bottom-0 left-0 w-full h-[65px] bg-[#050505] border-t border-white/10 z-50 flex items-center justify-around px-1 pb-safe">
+        <button onclick="App.navigate('home')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="home">
+            <i class="fa-solid fa-house text-lg mb-1"></i>
+            <span class="text-[8px] font-bold tracking-widest uppercase">Home</span>
+        </button>
+        <button onclick="App.navigate('music')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="music">
+            <i class="fa-solid fa-compact-disc text-lg mb-1"></i>
+            <span class="text-[8px] font-bold tracking-widest uppercase">Catalog</span>
+        </button>
+        <button onclick="App.navigate('requests')" class="nav-btn-mobile relative flex flex-col items-center justify-center w-16 h-full text-rude-yellow hover:text-white transition-colors group" data-target="requests">
+            <div class="absolute inset-0 bg-rude-yellow blur-md opacity-10 group-hover:opacity-30 transition-opacity rounded-full"></div>
+            <i class="fa-solid fa-bolt text-xl mb-1 relative z-10 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]"></i>
+            <span class="text-[8px] font-bold tracking-widest uppercase relative z-10 text-white">VIP</span>
+        </button>
+        <button onclick="App.navigate('courses')" class="nav-btn-mobile flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" data-target="courses">
+            <i class="fa-solid fa-graduation-cap text-lg mb-1"></i>
+            <span class="text-[8px] font-bold tracking-widest uppercase">Academy</span>
+        </button>
+        <button onclick="App.toggleMobileMenu()" class="flex flex-col items-center justify-center w-14 h-full text-gray-500 hover:text-white transition-colors" id="mobile-more-btn">
+            <i class="fa-solid fa-bars text-lg mb-1"></i>
+            <span class="text-[8px] font-bold tracking-widest uppercase">More</span>
+        </button>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden flex-col justify-end pb-[65px] opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0a0a0a] border-t border-white/10 rounded-t-2xl p-6 transform translate-y-full transition-transform duration-300 ease-out" id="mobile-menu-sheet">
+            <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+            <div class="flex flex-col gap-4 text-xl font-display uppercase tracking-widest text-center">
+                <button onclick="App.navigate('gallery'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2">VISUALS</button>
+                <button onclick="App.navigate('tour'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2">TOUR DATES</button>
+                <button onclick="App.navigate('about'); App.toggleMobileMenu();" class="text-gray-400 hover:text-white py-2 border-b border-white/10 pb-4">BIOGRAPHY</button>
+                <button onclick="App.navigate('booking'); App.toggleMobileMenu();" class="text-rude-red py-2 mt-2">BOOKING</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-1 relative h-full bg-transparent pt-14 md:pt-0">
+        
+        <section id="view-home" class="app-view active overflow-hidden">
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    RAGGA HOUSE ANTHEM • EXCLUSIVE DUBPLATES • BASS CULTURE • RAGGA HOUSE ANTHEM • EXCLUSIVE DUBPLATES • BASS CULTURE •
+                </div>
+                <div class="marquee-content" aria-hidden="true">
+                    RAGGA HOUSE ANTHEM • EXCLUSIVE DUBPLATES • BASS CULTURE • RAGGA HOUSE ANTHEM • EXCLUSIVE DUBPLATES • BASS CULTURE •
+                </div>
+            </div>
+
+            <div class="h-full flex flex-col items-center justify-center relative p-6 z-10" id="hero-container">
+                <div class="text-center w-full max-w-4xl" id="hero-content">
+                    <div class="inline-block border border-white/20 px-3 py-1 bg-black/50 mb-3 gs-home">
+                        <p class="font-body tracking-[0.25em] text-white text-[9px] uppercase font-bold" data-en="FOUNDER OF RUDE BASS RECORDS" data-es="FUNDADOR DE RUDE BASS RECORDS">FOUNDER OF RUDE BASS RECORDS</p>
+                    </div>
+                    
+                    <h1 class="font-display text-7xl md:text-[9rem] leading-[0.85] tracking-tighter m-0 gs-home text-white uppercase drop-shadow-2xl">
+                        YOUNG <span class="text-rude-red">J.B</span>
+                    </h1>
+                    <h2 class="font-display text-4xl md:text-[5rem] text-outline leading-none uppercase mt-1 gs-home">THE SELECTOR</h2>
+                    
+                    <p class="font-body text-xs md:text-sm mt-6 text-gray-400 font-light max-w-md mx-auto gs-home leading-relaxed" data-en='Destroying the dancefloor with heavy bass and unmatched energy. "We are all part of a lost culture".' data-es='Destruyendo la pista de baile con bajos pesados y energía inigualable. "We are all part of a lost culture".'>
+                        Destroying the dancefloor with heavy bass and unmatched energy. "We are all part of a lost culture".
+                    </p>
+                    
+                    <div class="mt-8 flex justify-center gs-home">
+                        <button onclick="App.navigate('music')" class="bg-white text-black font-display text-lg px-8 py-3 uppercase tracking-widest hover:bg-rude-red hover:text-white transition-colors duration-300" data-en="ENTER CATALOG" data-es="ENTRAR AL CATÁLOGO">
+                            ENTER CATALOG
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-music" class="app-view">
+            <div class="p-4 md:p-8 max-w-5xl mx-auto min-h-full">
+                <div class="flex items-end justify-between mb-6 pb-2 border-b border-white/10 gs-music">
+                    <h2 class="font-display text-4xl uppercase m-0 leading-none tracking-wide" data-en="DUB<span class='text-rude-red'>PLATES</span>" data-es="DUB<span class='text-rude-red'>PLATES</span>">DUB<span class="text-rude-red">PLATES</span></h2>
+                    <div id="main-equalizer" class="equalizer paused hidden md:flex mb-1"><span></span><span></span><span></span></div>
+                </div>
+                
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="w-full lg:w-[240px] shrink-0 gs-music">
+                        <div class="relative group border border-white/10 overflow-hidden shadow-2xl">
+                            <img id="main-catalog-cover" src="https://placehold.co/400x400/1a1a1a/333333?text=Loading..." class="w-full aspect-square object-cover transition-transform duration-500 grayscale group-hover:grayscale-0">
+                            <div class="absolute top-2 right-2 bg-rude-red text-white text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest">DIRECT</div>
+                        </div>
+                        <button onclick="App.playFirstTrack()" class="w-full mt-4 border border-white/20 bg-transparent text-white py-3 font-display text-lg uppercase tracking-widest hover:bg-white hover:text-black transition-all flex justify-center items-center gap-2" data-en="PLAY ALL" data-es="REPRODUCIR TODO">
+                            <i class="fa-solid fa-play text-xs"></i> PLAY ALL
+                        </button>
+                        
+                        <div class="flex justify-center gap-4 mt-5 border-t border-white/5 pt-4">
+                            <a href="#" class="text-gray-500 hover:text-[#1DB954] transition-colors"><i class="fa-brands fa-spotify text-lg"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fa-brands fa-apple text-lg"></i></a>
+                            <a href="#" class="text-gray-500 hover:text-[#ff5500] transition-colors"><i class="fa-brands fa-soundcloud text-lg"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 gs-music border border-white/5 bg-black p-4">
+                        <div class="flex items-center text-gray-500 text-[9px] font-bold tracking-[0.2em] border-b border-white/10 pb-2 mb-2 px-2 uppercase">
+                            <div class="w-6 text-center">#</div>
+                            <div class="flex-1" data-en="TRACK" data-es="PISTA">TRACK</div>
+                            <div class="w-16 text-right pr-2" data-en="GET" data-es="OBTENER">GET</div>
+                        </div>
+                        <div class="yt-track-list space-y-1" id="tracklist-container">
+                            <div class="text-center py-10 text-gray-500 text-xs font-mono">Syncing vault...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-courses" class="app-view">
+            <div class="p-4 md:p-8 max-w-5xl mx-auto min-h-full">
+                <div class="mb-6 border-b border-white/10 pb-2">
+                    <h2 class="font-display text-4xl uppercase m-0 leading-none tracking-wide" data-en="ACADEMY" data-es="ACADEMIA">ACADEMY</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="courses-container">
+                    </div>
+            </div>
+        </section>
+
+        <section id="view-gallery" class="app-view">
+            <div class="p-4 md:p-8 max-w-5xl mx-auto">
+                <div class="flex items-end justify-between mb-6 border-b border-white/10 pb-2">
+                    <h2 class="font-display text-4xl uppercase m-0 leading-none tracking-wide" data-en="VISUALS" data-es="VISUALES">VISUALS</h2>
+                </div>
+                
+                <div class="masonry-grid" id="gallery-container">
+                    </div>
+            </div>
+        </section>
+
+        <section id="view-tour" class="app-view">
+            <div class="p-4 md:p-8 max-w-3xl mx-auto">
+                <div class="mb-6 border-b border-white/10 pb-2">
+                    <h2 class="font-display text-4xl uppercase m-0 leading-none tracking-wide" data-en="TOUR DATES" data-es="FECHAS DE TOUR">TOUR DATES</h2>
+                </div>
+                
+                <div class="flex flex-col bg-black border border-white/10" id="tour-container">
+                     </div>
+            </div>
+        </section>
+
+        <section id="view-about" class="app-view">
+            <div class="p-4 md:p-8 max-w-5xl mx-auto min-h-full flex items-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full">
+                    <div class="relative w-1/2 mx-auto md:w-3/5 p-0 group">
+                        <div class="absolute inset-0 bg-rude-red blur-[60px] opacity-40 animate-pulse z-0 transition-opacity duration-500 group-hover:opacity-70"></div>
+                        <img src="https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?q=80&w=600&auto=format&fit=crop" class="relative z-10 w-full aspect-[3/4] object-cover grayscale border border-white/10">
+                        <div class="absolute -bottom-4 -left-6 bg-white text-black font-display text-xl md:text-2xl px-3 py-1 uppercase z-20 shadow-lg">
+                            THE SOUND ENGINEER
+                        </div>
+                    </div>
+                    
+                    <div class="md:pl-6 pt-8 md:pt-0">
+                        <h2 class="font-display text-4xl mb-4 uppercase leading-none tracking-wide text-white"><span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.5);">ABOUT</span> YOUNG J.B</h2>
+                        
+                        <div class="space-y-4 text-gray-400 font-mono text-xs leading-relaxed border-l border-rude-red pl-4">
+                            <p data-en="Born in the streets, forged in the clubs. Young J.B is the architect behind the 'Ragga House' sound that is redefining the underground." data-es="Nacido en las calles, forjado en los clubes. Young J.B es el ingeniero del sonido 'Ragga House' que redefine el underground.">
+                                Born in the streets, forged in the clubs. Young J.B is the architect behind the 'Ragga House' sound that is redefining the underground.
+                            </p>
+                            <p data-en='With residencies crossing borders, from Costa Rica to Philadelphia, every set is a manifesto. "We are all part of a lost culture," he says. His music is the map to find it.' data-es='Con residencias que cruzan fronteras, cada set es un manifiesto. "We are all part of a lost culture", dice. Su música es el mapa para encontrarla.'>
+                                With residencies crossing borders, from Costa Rica to Philadelphia, every set is a manifesto. "We are all part of a lost culture," he says. His music is the map to find it.
+                            </p>
+                        </div>
+
+                        <div class="mt-8 grid grid-cols-3 gap-2 border-t border-white/10 pt-6">
+                            <div class="bg-black border border-white/5 p-3 text-center">
+                                <p class="font-display text-2xl text-rude-yellow">1M+</p>
+                                <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1">Streams</p>
+                            </div>
+                            <div class="bg-black border border-white/5 p-3 text-center">
+                                <p class="font-display text-2xl text-white">50+</p>
+                                <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1">Gigs</p>
+                            </div>
+                            <div class="bg-black border border-white/5 p-3 text-center">
+                                <p class="font-display text-2xl text-rude-red">01</p>
+                                <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1">Label</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-requests" class="app-view">
+            <div class="p-4 max-w-xl mx-auto min-h-full flex flex-col justify-center">
+                <div class="bg-[#050505] p-6 md:p-8 border border-white/10 relative shadow-[0_0_30px_rgba(250,204,21,0.05)]">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-rude-yellow rounded-full blur-[60px] opacity-10 pointer-events-none"></div>
+                    
+                    <h2 class="font-display text-4xl text-white mb-1 leading-none uppercase text-center">LIVE <span class="text-rude-yellow">REQUEST</span></h2>
+                    <p class="text-gray-500 font-mono text-[10px] mb-6 text-center uppercase tracking-widest" data-en="SKIP THE LINE" data-es="SALTA LA FILA">SKIP THE LINE</p>
+                    
+                    <form id="request-form" class="space-y-4 relative z-10">
+                        <div>
+                            <input type="text" class="w-full bg-black border border-white/20 p-3 text-white focus:outline-none focus:border-rude-yellow text-xs" placeholder="Your Name / IG" required>
+                        </div>
+                        <div class="relative">
+                            <input type="text" class="w-full bg-black border border-white/20 p-3 pr-10 text-white focus:outline-none focus:border-rude-yellow text-xs" placeholder="Track Name (YouTube sync soon)" required>
+                            <i class="fa-brands fa-youtube absolute right-3 top-3.5 text-gray-600"></i>
+                        </div>
+                        
+                        <div class="pt-1">
+                            <label class="block text-[9px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-2 text-center" data-en="VIP TIP" data-es="PROPINA VIP">VIP TIP</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="App.selectTip(this)" class="tip-btn border border-white/10 bg-black py-2 text-center text-xs font-bold text-gray-400 hover:border-white/30 transition-all">$5</button>
+                                <button type="button" onclick="App.selectTip(this)" class="tip-btn border border-white/10 bg-black py-2 text-center text-xs font-bold text-gray-400 hover:border-white/30 transition-all">$10</button>
+                                <button type="button" onclick="App.selectTip(this)" class="tip-btn border-rude-yellow bg-rude-yellow text-black py-2 text-center text-xs font-black shadow-[0_0_15px_rgba(250,204,21,0.2)]">$20</button>
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="App.submitRequest(this)" class="w-full bg-white text-black font-display text-xl py-3 uppercase tracking-wider hover:bg-rude-yellow transition-colors mt-2">
+                            SEND TO BOOTH
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-booking" class="app-view">
+            <div class="p-4 md:p-8 max-w-4xl mx-auto min-h-full flex flex-col justify-center">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-10">
+                    
+                    <div class="md:col-span-2 flex flex-col justify-center">
+                        <h2 class="font-display text-4xl uppercase m-0 leading-none text-white mb-4" data-en="BOOK <span class='text-rude-red'>J.B</span>" data-es="BOOKING <span class='text-rude-red'>J.B</span>">BOOK <span class="text-rude-red">J.B</span></h2>
+                        <div class="space-y-4 text-gray-400 font-mono text-[10px] uppercase tracking-wider border-l border-white/20 pl-4">
+                            <p><i class="fa-solid fa-envelope text-rude-red mr-2"></i> mgmt@youngjb.com</p>
+                            <p><i class="fa-solid fa-location-dot text-rude-red mr-2"></i> Worldwide Availability</p>
+                            <p class="pt-4 text-gray-600 border-t border-white/10">Please provide full event details including venue capacity, lineup, and proposed fee. Serious inquiries only.</p>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-3 bg-black border border-white/10 p-6 relative">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-rude-red"></div>
+                        <form id="contact-form" class="flex flex-col gap-3 ml-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <input type="text" class="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-rude-red text-xs" placeholder="Promoter / Agency" required>
+                                <input type="email" class="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-rude-red text-xs" placeholder="Email" required>
+                            </div>
+                            <input type="text" class="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-rude-red text-xs" placeholder="City / Venue / Date" required>
+                            <textarea rows="3" class="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-rude-red resize-none text-xs" placeholder="Proposal Details" required></textarea>
+                            
+                            <button type="button" onclick="App.submitBooking(this)" class="mt-4 bg-transparent border border-rude-red text-rude-red font-display text-lg py-2 uppercase tracking-widest hover:bg-rude-red hover:text-white transition-colors w-full">
+                                SEND REQUEST
+                            </button>
+                        </form>
+                        <div id="booking-success" class="hidden absolute inset-0 bg-black flex-col items-center justify-center z-20 border border-white/10">
+                            <i class="fa-solid fa-check text-3xl text-green-500 mb-2"></i>
+                            <h4 class="font-display text-2xl text-white uppercase">RECEIVED</h4>
+                            <button onclick="App.resetForm('booking-success', 'contact-form')" class="mt-4 border border-white/30 text-white px-4 py-1 text-[9px] uppercase hover:bg-white hover:text-black transition-colors">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-2 md:pl-[14rem]">
+       <div id="global-player" class="fixed z-40 flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[12rem] md:right-4 pointer-events-none">
+        
+            <div class="pointer-events-auto w-full max-w-[1400px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
+                
+                <audio id="audio-engine" src="" preload="auto"></audio>
+
+                <div class="absolute top-0 left-0 w-full h-[2px] bg-gray-800 md:hidden">
+                    <div id="mobile-progress-fill" class="h-full bg-white w-0 relative transition-all duration-75"></div>
+                </div>
+
+                <div class="flex items-center gap-3 w-2/3 md:w-1/3 min-w-[120px] pl-1 md:pl-2">
+                    <div class="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-md md:rounded-full overflow-hidden border border-white/10 md:border-white/20">
+                        <img id="player-cover" src="https://placehold.co/100x100/000/333?text=JB" class="w-full h-full object-cover md:spin-slow spin-paused">
+                        <div class="hidden md:flex absolute inset-0 items-center justify-center"><div class="w-2 h-2 bg-black rounded-full border border-gray-700"></div></div>
+                    </div>
+                    <div class="overflow-hidden flex flex-col justify-center">
+                        <h4 id="player-title" class="font-bold text-sm md:text-xs text-white truncate">Select Track</h4>
+                        <p id="player-artist" class="text-[10px] md:text-[8px] text-gray-400 font-bold truncate uppercase tracking-widest mt-0.5">YOUNG J.B</p>
+                    </div>
+                </div>
+
+                <div class="flex md:hidden items-center gap-4 pr-3" onclick="event.stopPropagation();">
+                    <button onclick="App.togglePlay()" class="text-white hover:scale-105 transition-all p-2">
+                        <i class="fa-solid fa-play text-xl" id="play-icon-mobile"></i>
+                    </button>
+                </div>
+
+                <div class="hidden md:flex flex-col items-center w-1/3 max-w-[400px] shrink-0 px-4">
+                    <div class="flex items-center gap-6 text-white mb-1.5">
+                        <button class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-backward-step text-xs"></i></button>
+                        <button onclick="App.togglePlay()" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 hover:bg-rude-red hover:text-white transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                            <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-forward-step text-xs"></i></button>
+                    </div>
+                    <div class="w-full flex items-center gap-3 text-[9px] text-gray-500 font-mono">
+                        <span id="time-current">0:00</span>
+                        <input type="range" id="progress-bar" value="0" max="100" class="flex-1 accent-white hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
+                        <span id="time-total">--:--</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex justify-end items-center gap-3 w-1/3 pr-2">
+                    <i class="fa-solid fa-volume-low text-gray-500 text-[10px]"></i>
+                    <input type="range" id="volume-bar" value="80" max="100" class="w-16 accent-white hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
+                    <button class="bg-transparent border border-white/20 text-white font-bold text-[8px] px-3 py-1.5 rounded hover:bg-white hover:text-black transition-colors uppercase tracking-widest ml-4 shadow-sm">
+                        <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">GET</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+
+        <div id="full-player" class="fixed inset-0 z-[100] bg-black flex-col pt-8 pb-10 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden">
+            <div class="flex justify-between items-center mb-8 shrink-0">
+                <button onclick="App.closeFullPlayer()" class="text-white text-2xl p-2"><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="text-center">
+                    <p class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">NOW PLAYING</p>
+                    <p class="text-xs text-white font-bold tracking-widest uppercase mt-0.5">DUBPLATES STORE</p>
+                </div>
+                <button class="text-white text-xl p-2"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            </div>
+
+            <div class="w-full aspect-square bg-gray-900 rounded-md shadow-[0_0_50px_rgba(211,47,47,0.2)] mb-8 shrink-0 overflow-hidden relative">
+                <img id="fs-player-cover" src="https://placehold.co/500x500/000/333?text=JB" class="w-full h-full object-cover">
+            </div>
+
+            <div class="flex justify-between items-end mb-6 shrink-0">
+                <div class="overflow-hidden pr-4">
+                    <h2 id="fs-player-title" class="text-3xl font-display text-white truncate uppercase tracking-wide">Select Track</h2>
+                    <p id="fs-player-artist" class="text-sm text-gray-400 font-bold truncate uppercase tracking-widest mt-1">YOUNG J.B</p>
+                </div>
+                <button class="text-rude-yellow text-2xl hover:scale-110 transition-transform"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+
+            <div class="w-full mb-8 shrink-0 mt-auto">
+                <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full accent-white h-1.5 cursor-pointer bg-gray-800 rounded-full transition-all">
+                <div class="flex justify-between text-[10px] text-gray-500 font-mono mt-2">
+                    <span id="fs-time-current">0:00</span>
+                    <span id="fs-time-total">--:--</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center px-2 shrink-0">
+                <button class="text-gray-500 text-xl"><i class="fa-solid fa-shuffle"></i></button>
+                <button class="text-white text-4xl"><i class="fa-solid fa-backward-step"></i></button>
+                <button onclick="App.togglePlay()" class="w-20 h-20 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all">
+                    <i class="fa-solid fa-play ml-1 text-3xl" id="fs-play-icon"></i>
+                </button>
+                <button class="text-white text-4xl"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="text-gray-500 text-xl"><i class="fa-solid fa-repeat"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="course-modal" class="fixed inset-0 z-[200] hidden bg-black/95 backdrop-blur-sm flex-col items-center justify-center p-4">
+        <button onclick="App.closeCourseModal()" class="absolute top-6 right-6 text-white text-2xl hover:text-rude-red transition-colors"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-2xl bg-black border border-white/10 p-0 flex flex-col md:flex-row">
+            <div class="w-full md:w-1/2 h-48 md:h-auto bg-gray-900 relative">
+                <img id="course-modal-img" src="" class="w-full h-full object-cover grayscale">
+            </div>
+            <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col">
+                <p class="text-rude-red text-[9px] font-bold tracking-widest uppercase mb-1">Masterclass</p>
+                <h3 id="course-modal-title" class="font-display text-3xl uppercase mb-3">Course Title</h3>
+                <p id="course-modal-desc" class="text-gray-400 text-xs font-mono mb-6 leading-relaxed">Detailed description goes here...</p>
+                <div class="mt-auto border-t border-white/10 pt-4 flex justify-between items-center">
+                    <span id="course-modal-price" class="font-display text-2xl text-white">$0</span>
+                    <button class="bg-white text-black px-4 py-2 font-bold text-[10px] uppercase hover:bg-rude-red hover:text-white transition-colors" data-en="ENROLL NOW" data-es="INSCRIBIRSE AHORA">ENROLL NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AppState = {
+            currentView: 'home',
+            currentLang: 'en',
+            isPlaying: false,
+            data: null,
+            menuOpen: false
+        };
+
+        const MOCK_DATA = {
+            tracks: [
+                { id: '1', title: 'Badman Fadwud (VIP Mix)', artist: 'Young J.B ft. El Jamaiquino', price: 4.99, isFree: false, duration: '3:45', coverUrl: 'https://images.unsplash.com/photo-1493225457224-eda0e6fd1463?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
+                { id: '2', title: 'Jungle Terror', artist: 'Young J.B', price: 0, isFree: true, duration: '4:12', coverUrl: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
+                { id: '3', title: 'Midnight Groove', artist: 'Young J.B', price: 5.99, isFree: false, duration: '6:05', coverUrl: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=200&auto=format&fit=crop', audioUrl: '' },
+                { id: '4', title: 'Rude Bass Anthem', artist: 'Young J.B', price: 2.99, isFree: false, duration: '5:30', coverUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=200&auto=format&fit=crop', audioUrl: '' }
+            ],
+            courses: [
+                { id: 'c1', title: 'Ragga House Pro', desc_en: 'Sound design, heavy bass, and track structuring for clubs. Learn the secrets of the underground sound.', desc_es: 'Diseño sonoro, bajos pesados y estructura para club. Aprende los secretos del sonido underground.', price: 199, imageUrl: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=600&auto=format&fit=crop', isAvailable: true },
+                { id: 'c2', title: 'Mix & Master', desc_en: 'Make your tracks sound huge and clean on any sound system.', desc_es: 'Haz que tus pistas suenen gigantes en cualquier sistema de sonido.', price: 89, imageUrl: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?q=80&w=600&auto=format&fit=crop', isAvailable: true }
+            ],
+            tour: [
+                { id: 'd1', date: '2026-10-25', title: 'Halloween Afterparty', location: 'Club Distrito, San José', ticketUrl: '#', isSoldOut: false },
+                { id: 'd2', date: '2026-11-12', title: 'Leo Session', location: 'Interbeat Club', ticketUrl: '#', isSoldOut: true },
+                { id: 'd3', date: '2027-02-08', title: 'The Social Pause', location: 'Philadelphia, PA (USA)', ticketUrl: '#', isSoldOut: false }
+            ],
+            gallery: [
+                { id: 'g1', title: 'LIVE ACT', imageUrl: 'https://images.unsplash.com/photo-1516280440502-a2cebc005e8d?q=80&w=800&auto=format&fit=crop', type: 'image' },
+                { id: 'g2', title: 'MERCH', imageUrl: 'https://images.unsplash.com/photo-1523398002811-999aa8d9512e?q=80&w=800&auto=format&fit=crop', type: 'shop' },
+                { id: 'g3', title: 'STUDIO', imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop', type: 'image' }
+            ]
+        };
+
+        const App = {
+            audio: document.getElementById('audio-engine'),
+            coverImg: document.getElementById('player-cover'),
+            
+            async init() {
+                try {
+                    throw new Error("Simulando conexión..."); 
+                } catch (e) {
+                    AppState.data = MOCK_DATA;
+                } finally {
+                    this.renderDynamicContent();
+                    this.setupAudioListeners();
+                    setTimeout(() => this.playIntroAnimation(), 500);
+                }
+            },
+
+            renderDynamicContent() {
+                const lang = AppState.currentLang;
+
+                // 1. Tracks (Lista compacta)
+                const tracklist = document.getElementById('tracklist-container');
+                if(tracklist && AppState.data.tracks) {
+                    tracklist.innerHTML = AppState.data.tracks.map((t, i) => `
+                        <div class="yt-track-item flex items-center py-1.5 px-2 sharp-border border border-transparent cursor-pointer transition-colors group" onclick="App.loadTrack('${t.id}')">
+                            <div class="w-6 text-center text-gray-500 text-[10px] font-mono font-bold group-hover:text-white transition-colors">
+                                <span class="track-num">${i + 1}</span>
+                                <i class="fa-solid fa-play track-play text-[10px] text-rude-red"></i>
+                            </div>
+                            <img src="${t.coverUrl}" class="w-8 h-8 object-cover ml-2 grayscale group-hover:grayscale-0 transition-all">
+                            <div class="flex-1 overflow-hidden ml-3">
+                                <h4 class="text-white text-xs font-bold truncate group-hover:text-rude-red transition-colors">${t.title}</h4>
+                                <p class="text-[9px] text-gray-500 truncate uppercase tracking-widest mt-0.5">${t.artist}</p>
+                            </div>
+                            <div class="w-16 text-right pr-1">
+                                ${t.isFree 
+                                    ? `<span class="text-[9px] font-bold text-gray-400 group-hover:text-white transition-colors" data-en="FREE" data-es="GRATIS">${lang === 'en'?'FREE':'GRATIS'}</span>` 
+                                    : `<span class="text-[9px] font-bold text-white group-hover:text-rude-red transition-colors">$${t.price}</span>`}
+                            </div>
+                        </div>
+                    `).join('');
+
+                    if(AppState.data.tracks.length > 0) {
+                        document.getElementById('main-catalog-cover').src = AppState.data.tracks[0].coverUrl;
+                    }
+                }
+
+                // 2. Cursos (Brutalistas)
+                const coursesContainer = document.getElementById('courses-container');
+                if(coursesContainer && AppState.data.courses) {
+                    coursesContainer.innerHTML = AppState.data.courses.map(c => `
+                        <div onclick="App.openCourseModal('${c.id}')" class="sharp-border border border-white/10 bg-black flex flex-col group ${c.isAvailable ? 'cursor-pointer' : 'opacity-60'} transition-colors">
+                            <div class="relative h-40 overflow-hidden">
+                                ${!c.isAvailable ? `<div class="absolute inset-0 bg-black/80 z-10 flex items-center justify-center"><i class="fa-solid fa-lock text-2xl text-gray-600"></i></div>` : ''}
+                                <img src="${c.imageUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                                <h3 class="absolute bottom-2 left-2 font-display text-2xl text-white uppercase tracking-wide bg-black px-2 leading-none mix-blend-difference">${c.title}</h3>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // 3. Tour
+                const tourContainer = document.getElementById('tour-container');
+                if(tourContainer && AppState.data.tour) {
+                    const monthNames = { 'en': ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'], 'es': ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'] };
+                    tourContainer.innerHTML = AppState.data.tour.map(d => {
+                        const dateObj = new Date(d.date + 'T12:00:00');
+                        const month = monthNames[lang][dateObj.getMonth()];
+                        const day = String(dateObj.getDate()).padStart(2, '0');
+                        
+                        return `
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border-b border-white/10 last:border-0 ${d.isSoldOut ? 'bg-white/5 opacity-50' : 'hover:bg-white/5 transition-colors group'}">
+                            <div class="flex items-center gap-4 mb-3 sm:mb-0">
+                                <div class="text-center w-10 shrink-0">
+                                    <p class="text-[9px] ${d.isSoldOut ? 'text-gray-500' : 'text-rude-red'} font-bold uppercase tracking-widest">${month}</p>
+                                    <p class="font-display text-2xl ${d.isSoldOut ? 'text-gray-500' : 'text-white group-hover:text-rude-red'} transition-colors leading-none">${day}</p>
+                                </div>
+                                <div class="pl-2 border-l border-white/10">
+                                    <h4 class="text-base font-display uppercase tracking-wide leading-tight text-white">${d.title}</h4>
+                                    <p class="text-gray-500 font-mono text-[9px] mt-0.5"><i class="fa-solid fa-location-dot ${d.isSoldOut ? '' : 'text-rude-yellow'} mr-1"></i> ${d.location}</p>
+                                </div>
+                            </div>
+                            <button ${d.isSoldOut ? 'disabled' : ''} class="text-[9px] font-bold uppercase tracking-widest transition-colors ${d.isSoldOut ? 'text-gray-600' : 'text-white group-hover:text-rude-red'}" data-en="${d.isSoldOut ? 'SOLD OUT' : 'TICKETS'}" data-es="${d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS'}">${lang === 'en' ? (d.isSoldOut ? 'SOLD OUT' : 'TICKETS') : (d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS')}</button>
+                        </div>`;
+                    }).join('');
+                }
+
+                // 4. Galería (Bordes cuadrados, neon)
+                const galleryContainer = document.getElementById('gallery-container');
+                if(galleryContainer && AppState.data.gallery) {
+                    galleryContainer.innerHTML = AppState.data.gallery.map(g => `
+                        <div class="masonry-item sharp-border border border-white/5 group relative overflow-hidden bg-black cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(211,47,47,0.3)] transition-all">
+                            <img src="${g.imageUrl}" class="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-500">
+                            ${g.type === 'shop' 
+                                ? `<div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-3">
+                                    <p class="font-display text-lg text-white mb-2 tracking-widest uppercase">${g.title}</p>
+                                    <button class="border border-white text-white px-3 py-1 font-bold text-[9px] uppercase tracking-widest hover:bg-white hover:text-black transition-colors" data-en="SHOP" data-es="COMPRAR">${lang === 'en' ? 'SHOP' : 'COMPRAR'}</button>
+                                   </div>`
+                                : `<div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                                    <p class="font-display text-xl tracking-widest text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">${g.title}</p>
+                                   </div>`
+                            }
+                        </div>
+                    `).join('');
+                }
+
+                this.updateUITexts();
+            },
+
+            // --- Cursos Modal ---
+            openCourseModal(id) {
+                const course = AppState.data.courses.find(c => c.id === id);
+                if(!course || !course.isAvailable) return;
+                
+                document.getElementById('course-modal-img').src = course.imageUrl;
+                document.getElementById('course-modal-title').textContent = course.title;
+                document.getElementById('course-modal-desc').textContent = AppState.currentLang === 'en' ? course.desc_en : course.desc_es;
+                document.getElementById('course-modal-price').textContent = `$${course.price}`;
+                
+                const modal = document.getElementById('course-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                gsap.fromTo(modal.children[1], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3 });
+            },
+            closeCourseModal() {
+                const modal = document.getElementById('course-modal');
+                gsap.to(modal.children[1], { y: 20, opacity: 0, duration: 0.2, onComplete: () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }});
+            },
+
+            playIntroAnimation() {
+                const tl = gsap.timeline();
+                tl.to(".intro-logo", { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" })
+                  .to("#enter-screen", { opacity: 0, duration: 0.5, delay: 0.5, display: 'none' })
+                  .call(() => {
+                      document.getElementById('global-player').classList.remove('translate-y-[200%]');
+                      gsap.fromTo(".gs-home", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" });
+                  });
+            },
+
+            // 1. Modificar navigate para colorear la barra inferior móvil
+            navigate(targetId) {
+                if (AppState.currentView === targetId) return;
+                
+                // Desktop nav
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                document.getElementById(`nav-${targetId}`)?.classList.add('active');
+
+                // Mobile Bottom Nav color
+                document.querySelectorAll('.nav-btn-mobile').forEach(el => {
+                    el.classList.remove('text-white');
+                    el.classList.add('text-gray-500');
+                });
+                const mobileBtn = document.querySelector(`.nav-btn-mobile[data-target="${targetId}"]`);
+                if(mobileBtn && targetId !== 'requests') {
+                    mobileBtn.classList.remove('text-gray-500');
+                    mobileBtn.classList.add('text-white');
+                }
+
+                const current = document.getElementById(`view-${AppState.currentView}`);
+                const next = document.getElementById(`view-${targetId}`);
+
+                gsap.to(current, { opacity: 0, scale: 0.98, duration: 0.2, ease: "power2.in", onComplete: () => {
+                    current.classList.remove('active');
+                    next.classList.add('active');
+                    next.scrollTop = 0; 
+                    gsap.fromTo(next, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" });
+                    AppState.currentView = targetId;
+                }});
+            },
+
+            // 2. Modificar toggleMobileMenu para el Bottom Sheet "More"
+            toggleMobileMenu() {
+                AppState.menuOpen = !AppState.menuOpen;
+                const menu = document.getElementById('mobile-menu');
+                const sheet = document.getElementById('mobile-menu-sheet');
+                const icon = document.querySelector('#mobile-more-btn i');
+                
+                if (AppState.menuOpen) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('flex');
+                    icon.classList.replace('fa-bars', 'fa-xmark');
+                    document.getElementById('mobile-more-btn').classList.replace('text-gray-500', 'text-white');
+                    
+                    // Animación suave de entrada
+                    setTimeout(() => {
+                        menu.classList.remove('opacity-0');
+                        sheet.classList.remove('translate-y-full');
+                    }, 10);
+                } else {
+                    icon.classList.replace('fa-xmark', 'fa-bars');
+                    document.getElementById('mobile-more-btn').classList.replace('text-white', 'text-gray-500');
+                    
+                    // Animación suave de salida
+                    menu.classList.add('opacity-0');
+                    sheet.classList.add('translate-y-full');
+                    setTimeout(() => {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('flex');
+                    }, 300);
+                }
+            },
+
+            // 3. Sincronizar Audio Listeners con el Full-Screen Player
+            setupAudioListeners() {
+                const progBar = document.getElementById('progress-bar');
+                const fsProgBar = document.getElementById('fs-progress-bar');
+                const mobileProgFill = document.getElementById('mobile-progress-fill');
+                
+                this.audio.addEventListener('timeupdate', () => {
+                    if(this.audio.duration) {
+                        const percent = (this.audio.currentTime / this.audio.duration) * 100;
+                        progBar.value = percent;
+                        fsProgBar.value = percent;
+                        mobileProgFill.style.width = `${percent}%`;
+                        
+                        const curTime = this.formatTime(this.audio.currentTime);
+                        const totTime = this.formatTime(this.audio.duration);
+                        
+                        document.getElementById('time-current').textContent = curTime;
+                        document.getElementById('time-total').textContent = totTime;
+                        document.getElementById('fs-time-current').textContent = curTime;
+                        document.getElementById('fs-time-total').textContent = totTime;
+                    }
+                });
+
+                this.audio.addEventListener('ended', () => {
+                    this.togglePlay();
+                    progBar.value = 0; fsProgBar.value = 0; mobileProgFill.style.width = '0%';
+                });
+
+                const seek = (e) => { if(this.audio.duration) this.audio.currentTime = (e.target.value / 100) * this.audio.duration; };
+                progBar.addEventListener('input', seek);
+                fsProgBar.addEventListener('input', seek);
+            },
+
+            // 4. Sincronizar Botón de Play en ambas vistas
+            togglePlay() {
+                const iconDesktop = document.getElementById('play-icon');
+                const iconMobile = document.getElementById('play-icon-mobile');
+                const iconFS = document.getElementById('fs-play-icon');
+                const eq = document.getElementById('main-equalizer');
+                
+                if (AppState.isPlaying) {
+                    this.audio.pause();
+                    iconDesktop.className = 'fa-solid fa-play ml-0.5 text-sm';
+                    iconMobile.className = 'fa-solid fa-play text-xl';
+                    iconFS.className = 'fa-solid fa-play ml-1 text-2xl';
+                    eq?.classList.add('paused');
+                    this.coverImg.classList.add('spin-paused');
+                } else {
+                    if(this.audio.src === '' || this.audio.src.includes(window.location.host)) {
+                        if(AppState.data.tracks && AppState.data.tracks.length > 0) this.loadTrack(AppState.data.tracks[0].id, false);
+                    }
+                    this.audio.play().catch(e => console.log("Autoplay prevent", e));
+                    iconDesktop.className = 'fa-solid fa-pause text-sm';
+                    iconMobile.className = 'fa-solid fa-pause text-xl';
+                    iconFS.className = 'fa-solid fa-pause text-2xl';
+                    eq?.classList.remove('paused');
+                    this.coverImg.classList.remove('spin-paused');
+                }
+                AppState.isPlaying = !AppState.isPlaying;
+            },
+
+            // 5. Cargar Track sincronizado en ambas portadas
+            loadTrack(id, autoPlay = true) {
+                const track = AppState.data.tracks.find(t => t.id === id);
+                if(!track) return;
+
+                document.getElementById('player-title').textContent = track.title;
+                document.getElementById('player-artist').textContent = track.artist;
+                document.getElementById('fs-player-title').textContent = track.title;
+                document.getElementById('fs-player-artist').textContent = track.artist;
+                
+                this.coverImg.src = track.coverUrl;
+                document.getElementById('fs-player-cover').src = track.coverUrl;
+                
+                const mainCover = document.getElementById('main-catalog-cover');
+                if(mainCover) mainCover.src = track.coverUrl;
+                
+                this.coverImg.style.animation = 'none'; this.coverImg.offsetHeight; this.coverImg.style.animation = null; this.coverImg.classList.add('spin-paused');
+                
+                if(autoPlay && !AppState.isPlaying) this.togglePlay();
+                else if (autoPlay && AppState.isPlaying) { this.audio.play(); this.coverImg.classList.remove('spin-paused'); }
+            },
+
+            // 6. NUEVAS FUNCIONES: Pantalla Completa Reproductor
+            openFullPlayer(e) {
+                if (window.innerWidth >= 768) return; // Solo funciona en móvil
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.remove('hidden');
+                fsPlayer.classList.add('flex');
+                
+                // Timeout para permitir que el display:flex renderice antes de transformar
+                setTimeout(() => {
+                    fsPlayer.classList.remove('translate-y-full');
+                }, 10);
+            },
+
+            closeFullPlayer() {
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.add('translate-y-full');
+                
+                // Esperar a que baje para ocultarlo
+                setTimeout(() => {
+                    fsPlayer.classList.add('hidden');
+                    fsPlayer.classList.remove('flex');
+                }, 500);
+            },
+
+            toggleLang() {
+                AppState.currentLang = AppState.currentLang === 'en' ? 'es' : 'en';
+                const label = AppState.currentLang === 'en' ? 'ES' : 'EN';
+                document.getElementById('lang-desktop').innerText = label;
+                document.getElementById('lang-mobile').innerText = label;
+                this.renderDynamicContent(); 
+            },
+
+            updateUITexts() {
+                document.querySelectorAll(`[data-${AppState.currentLang}]`).forEach(el => {
+                    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return; 
+                    el.innerHTML = el.getAttribute(`data-${AppState.currentLang}`);
+                });
+                document.querySelectorAll(`[data-${AppState.currentLang}-placeholder]`).forEach(el => {
+                    el.placeholder = el.getAttribute(`data-${AppState.currentLang}-placeholder`);
+                });
+            },
+
+            selectTip(btn) {
+                document.querySelectorAll('.tip-btn').forEach(el => {
+                    el.classList.remove('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'shadow-[0_0_15px_rgba(250,204,21,0.2)]');
+                    el.classList.add('border-white/10', 'bg-black', 'text-gray-400');
+                });
+                btn.classList.remove('border-white/10', 'bg-black', 'text-gray-400');
+                btn.classList.add('border-rude-yellow', 'bg-rude-yellow', 'text-black', 'shadow-[0_0_15px_rgba(250,204,21,0.2)]');
+            },
+            
+            submitRequest(btn) {
+                const originalText = AppState.currentLang === 'es' ? 'ENVIAR A CABINA' : 'SEND TO BOOTH';
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    btn.classList.replace('bg-white', 'bg-green-500'); btn.classList.replace('text-black', 'text-white');
+                    setTimeout(() => {
+                        document.getElementById('request-form').reset();
+                        btn.innerHTML = originalText;
+                        btn.classList.replace('bg-green-500', 'bg-white'); btn.classList.replace('text-white', 'text-black');
+                    }, 2000);
+                }, 1000);
+            },
+
+            submitBooking(btn) {
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                setTimeout(() => {
+                    document.getElementById('contact-form').classList.add('hidden');
+                    const successMsg = document.getElementById('booking-success');
+                    successMsg.classList.remove('hidden'); successMsg.classList.add('flex');
+                    btn.innerHTML = AppState.currentLang === 'es' ? 'SEND REQUEST' : 'SEND REQUEST';
+                }, 1000);
+            },
+
+            resetForm(successId, formId) {
+                document.getElementById(successId).classList.add('hidden'); document.getElementById(successId).classList.remove('flex');
+                const form = document.getElementById(formId);
+                form.classList.remove('hidden'); form.reset();
+            }
+        };
+
+        window.addEventListener('load', () => App.init());
+    </script>
+</body>
+</html>
