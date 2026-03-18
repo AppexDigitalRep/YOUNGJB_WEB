@@ -130,6 +130,17 @@
         /* --- Ocultar scrollbar horizontal en botones --- */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- Animación de disco y acentos --- */
+        @keyframes spin-record {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .spin-slow { animation: spin-record 4s linear infinite; }
+        .spin-paused { animation-play-state: paused !important; }
+        
+        .red-accent { accent-color: #D32F2F; }
+        .red-accent::-webkit-slider-thumb { background-color: #D32F2F; }
         
     </style>
 </head>
@@ -437,9 +448,9 @@
     </main>
 
     <div class="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-2 md:pl-[14rem]">
-       <div id="global-player" class="fixed z-[45] flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[12rem] md:right-4 pointer-events-none">
+       <div id="global-player" class="fixed z-[45] flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[240px] md:right-8 pointer-events-none">
         
-            <div class="pointer-events-auto w-full max-w-[1400px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
+            <div class="pointer-events-auto w-full max-w-[1200px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
                 <audio id="audio-engine" src="" preload="auto"></audio>
     
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gray-800 md:hidden">
@@ -478,7 +489,7 @@
                     </div>
                     <div class="w-full flex items-center gap-3 text-[9px] text-gray-500 font-mono">
                         <span id="time-current">0:00</span>
-                        <input type="range" id="progress-bar" value="0" max="100" class="flex-1 accent-rude-red hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
+                        <input type="range" id="progress-bar" value="0" max="100" class="flex-1 red-accent h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
                         <span id="time-total">--:--</span>
                     </div>
                 </div>
@@ -489,10 +500,7 @@
                     <button class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-share-nodes text-sm"></i></button>
                     <div class="w-px h-4 bg-white/20 mx-1"></div>
                     <i class="fa-solid fa-volume-low text-gray-500 text-[10px]"></i>
-                    <input type="range" id="volume-bar" value="80" max="100" class="w-16 accent-white hover:accent-rude-red h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
-                    <button class="bg-transparent border border-white/20 text-white font-bold text-[8px] px-3 py-1.5 rounded hover:bg-white hover:text-black transition-colors uppercase tracking-widest ml-2 shadow-sm">
-                        <i class="fa-solid fa-download"></i> <span class="hidden lg:inline">GET</span>
-                    </button>
+                    <input type="range" id="volume-bar" value="80" max="100" class="w-16 red-accent h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
                 </div>
             </div>
         </div>
@@ -526,9 +534,6 @@
                         <h2 id="fs-player-title" class="text-2xl font-bold text-white truncate">Select Track</h2>
                         <p id="fs-player-artist" class="text-sm text-gray-400 font-medium truncate mt-0.5">YOUNG J.B</p>
                     </div>
-                    <button class="bg-white text-black px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg active:scale-95 transition-transform shrink-0 flex items-center gap-2">
-                        <i class="fa-solid fa-download"></i> GET
-                    </button>
                 </div>
     
                 <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
@@ -536,13 +541,13 @@
                         <button onclick="App.toggleLike()" class="px-4 py-2 text-white border-r border-white/10 hover:bg-white/5 rounded-l-full transition-colors text-sm"><i id="fs-like-btn" class="fa-regular fa-heart mr-1.5"></i> Like</button>
                         <button class="px-4 py-2 text-white hover:bg-white/5 rounded-r-full transition-colors text-sm"><i class="fa-regular fa-thumbs-down"></i></button>
                     </div>
-                    <button onclick="App.openComments()" class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-regular fa-comment"></i> 18</button>
+                    <button onclick="App.openComments()" class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-regular fa-comment"></i> <span id="comments-count">18</span></button>
                     <button class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-solid fa-share"></i> Share</button>
                 </div>
             </div>
     
             <div class="w-full shrink-0 mb-6 mt-auto">
-                <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full accent-rude-red h-1.5 cursor-pointer bg-gray-600 rounded-full transition-all">
+                <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full red-accent h-1.5 cursor-pointer bg-gray-600 rounded-full transition-all">
                 <div class="flex justify-between text-[11px] text-gray-400 font-mono mt-3 px-1">
                     <span id="fs-time-current">0:00</span>
                     <span id="fs-time-total">--:--</span>
@@ -562,11 +567,12 @@
     
         <div id="comments-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300">
             <div class="bg-[#111] w-full h-[70vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300 ease-out" id="comments-sheet">
-                <div class="flex justify-between items-center p-5 border-b border-white/5">
-                    <h3 class="text-white font-display text-xl tracking-wide uppercase">Comments <span class="text-gray-500 text-sm ml-2">18</span></h3>
+                <div class="flex justify-between items-center p-5 border-b border-white/5 shrink-0">
+                    <h3 class="text-white font-display text-xl tracking-wide uppercase">Comments</h3>
                     <button onclick="App.closeComments()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <div class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar">
+                
+                <div class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar" id="comments-list">
                     <div class="flex gap-3">
                         <div class="w-8 h-8 rounded-full bg-gray-800 shrink-0"></div>
                         <div>
@@ -575,8 +581,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4 border-t border-white/5 bg-[#0a0a0a]">
-                    <input type="text" class="w-full bg-black border border-white/20 rounded-full px-4 py-2.5 text-white focus:outline-none focus:border-rude-red text-sm" placeholder="Add a comment...">
+                
+                <div class="p-4 border-t border-white/5 bg-[#0a0a0a] flex gap-2 shrink-0">
+                    <input type="text" id="new-comment-input" class="w-full bg-black border border-white/20 rounded-full px-4 py-2.5 text-white focus:outline-none focus:border-rude-red text-sm" placeholder="Add a comment..." onkeypress="if(event.key === 'Enter') App.addComment()">
+                    <button onclick="App.addComment()" class="bg-white text-black px-4 rounded-full font-bold hover:bg-gray-200 transition shrink-0"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
@@ -979,18 +987,18 @@
                 const mainCover = document.getElementById('main-catalog-cover');
                 if(mainCover) mainCover.src = track.coverUrl;
                 
-                // Cargar Audio Real y Video Youtube (Si existe)
                 this.audio.src = track.audioUrl;
                 const ytIframe = document.getElementById('fs-yt-iframe');
                 if(track.ytId) { 
                     ytIframe.src = `https://www.youtube.com/embed/${track.ytId}?autoplay=0&controls=0&modestbranding=1`; 
                 } else { 
                     ytIframe.src = ""; 
-                    this.toggleVideoMode(false); // Forzar a modo audio si no hay video
                 }
+                // Siempre forzar la vista de Audio al iniciar un track nuevo
+                this.toggleVideoMode(true);
                 
                 if(autoPlay) {
-                    AppState.isPlaying = false; // Reset to force play toggle
+                    AppState.isPlaying = false; 
                     this.togglePlay();
                 }
             },
@@ -1007,7 +1015,6 @@
                 this.loadTrack(AppState.data.tracks[prevIdx].id, true);
             },
 
-            // --- Interactividad Extra del Player ---
             toggleLike() {
                 AppState.isLiked = !AppState.isLiked;
                 const btnDesktop = document.getElementById('desktop-like-btn');
@@ -1033,12 +1040,10 @@
                 const b2 = document.getElementById('fs-btn-shuffle');
                 if(AppState.isShuffle) { 
                     b1?.classList.add('text-rude-red'); 
-                    b2?.classList.add('text-white'); 
-                    b2?.classList.remove('text-gray-400');
+                    b2?.classList.add('text-white'); b2?.classList.remove('text-gray-400');
                 } else { 
                     b1?.classList.remove('text-rude-red'); 
-                    b2?.classList.remove('text-white'); 
-                    b2?.classList.add('text-gray-400');
+                    b2?.classList.remove('text-white'); b2?.classList.add('text-gray-400');
                 }
             },
 
@@ -1048,12 +1053,10 @@
                 const b2 = document.getElementById('fs-btn-repeat');
                 if(AppState.isRepeat) { 
                     b1?.classList.add('text-rude-red'); 
-                    b2?.classList.add('text-white'); 
-                    b2?.classList.remove('text-gray-400');
+                    b2?.classList.add('text-white'); b2?.classList.remove('text-gray-400');
                 } else { 
                     b1?.classList.remove('text-rude-red'); 
-                    b2?.classList.remove('text-white'); 
-                    b2?.classList.add('text-gray-400');
+                    b2?.classList.remove('text-white'); b2?.classList.add('text-gray-400');
                 }
             },
 
@@ -1087,14 +1090,65 @@
                 }
             },
 
-            // --- Formularios y Traducciones ---
+            openComments() {
+                const modal = document.getElementById('comments-modal');
+                const sheet = document.getElementById('comments-sheet');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                setTimeout(() => { modal.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
+            },
+
+            closeComments() {
+                const modal = document.getElementById('comments-modal');
+                const sheet = document.getElementById('comments-sheet');
+                sheet.classList.add('translate-y-full');
+                setTimeout(() => { modal.classList.add('opacity-0'); }, 100);
+                setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+            },
+
+            addComment() {
+                const input = document.getElementById('new-comment-input');
+                const text = input.value.trim();
+                if(!text) return;
+                
+                const list = document.getElementById('comments-list');
+                const html = `
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-rude-red shrink-0 flex items-center justify-center text-[10px] font-bold text-white">TÚ</div>
+                        <div>
+                            <p class="text-xs text-white font-bold mb-1">@tú <span class="font-normal text-gray-600 text-[10px] ml-2">Ahora mismo</span></p>
+                            <p class="text-sm text-gray-200">${text}</p>
+                        </div>
+                    </div>
+                `;
+                list.insertAdjacentHTML('beforeend', html);
+                input.value = '';
+                list.scrollTop = list.scrollHeight;
+                
+                // Actualizar contador
+                const countSpan = document.getElementById('comments-count');
+                if(countSpan) countSpan.textContent = parseInt(countSpan.textContent) + 1;
+            },
+
+            openFullPlayer(e) {
+                if (window.innerWidth >= 768) return;
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.remove('hidden'); fsPlayer.classList.add('flex');
+                setTimeout(() => fsPlayer.classList.remove('translate-y-full'), 10);
+            },
+
+            closeFullPlayer() {
+                const fsPlayer = document.getElementById('full-player');
+                fsPlayer.classList.add('translate-y-full');
+                setTimeout(() => { fsPlayer.classList.add('hidden'); fsPlayer.classList.remove('flex'); }, 500);
+            },
+
             toggleLang() {
                 AppState.currentLang = AppState.currentLang === 'en' ? 'es' : 'en';
                 const label = AppState.currentLang === 'en' ? 'ES' : 'EN';
                 document.getElementById('lang-desktop').innerText = label;
                 document.getElementById('lang-mobile').innerText = label;
                 this.updateUITexts();
-                this.renderDynamicContent(); // Re-renderiza para aplicar textos anclados a variables
+                this.renderDynamicContent(); 
             },
 
             updateUITexts() {
@@ -1152,6 +1206,8 @@
             }
         };
 
+        // Exponer globalmente para asegurar que el HTML lo encuentre sin problemas
+        window.App = App;
         window.addEventListener('load', () => App.init());
     </script>
 </body>
