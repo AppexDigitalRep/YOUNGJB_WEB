@@ -115,9 +115,9 @@
         .nav-item { position: relative; transition: all 0.3s ease; display: block; width: 100%; text-align: left; padding: 4px 0; }
         
         .nav-item.active { 
-            color: theme('colors.rude-yellow'); 
+            color: white; 
             transform: translateX(8px); 
-            text-shadow: 0 0 20px rgba(250, 204, 21, 0.6); 
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.6); 
             letter-spacing: 0.2em; 
         }
         
@@ -164,12 +164,12 @@
     </button>
 
     <nav class="hidden md:flex flex-col w-48 lg:w-52 bg-black h-full border-r border-white/10 p-5 relative z-50 shrink-0 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
-        <div class="mb-6">
+        <div class="mb-6 shrink-0">
             <h2 class="font-display text-3xl text-white leading-none uppercase tracking-wide">YOUNG<br><span class="text-rude-red">J.B</span></h2>
             <div class="w-8 h-[2px] bg-rude-yellow mt-3"></div>
         </div>
 
-        <ul class="flex flex-col gap-5 font-body font-semibold text-sm text-gray-500 uppercase tracking-[0.2em] mt-4">
+        <ul class="flex flex-col gap-4 font-body font-semibold text-sm text-gray-500 uppercase tracking-[0.2em] my-auto">
             <li><button onclick="App.navigate('home')" id="nav-home" class="nav-item active w-full text-left" data-en="HOME" data-es="INICIO">HOME</button></li>
             <li><button onclick="App.navigate('music')" id="nav-music" class="nav-item w-full text-left" data-en="CATALOG" data-es="CATÁLOGO">CATALOG</button></li>
             <li><button onclick="App.navigate('courses')" id="nav-courses" class="nav-item w-full text-left" data-en="ACADEMY" data-es="ACADEMIA">ACADEMY</button></li>
@@ -178,7 +178,7 @@
             <li><button onclick="App.navigate('about')" id="nav-about" class="nav-item w-full text-left" data-en="BIOGRAPHY" data-es="BIOGRAFÍA">BIOGRAPHY</button></li>
         </ul>
 
-        <div class="mt-auto space-y-3 pb-2">
+        <div class="mt-auto space-y-3 pb-2 shrink-0">
             <button onclick="App.navigate('requests')" id="nav-requests" class="w-full bg-rude-yellow text-black py-2.5 px-3 font-display text-sm uppercase tracking-widest border-2 border-transparent shadow-[3px_3px_0px_#D32F2F] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[1px_1px_0px_#D32F2F] active:shadow-none active:translate-y-[3px] active:translate-x-[3px] transition-all flex items-center justify-center gap-2 group">
                 <i class="fa-solid fa-bolt text-rude-red group-hover:animate-pulse"></i> 
                 <span data-en="VIP REQUEST" data-es="PETICIÓN VIP">VIP REQUEST</span>
