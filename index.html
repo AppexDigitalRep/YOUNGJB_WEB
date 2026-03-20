@@ -271,17 +271,17 @@
                 <div class="flex flex-col lg:flex-row gap-8">
                     <div class="w-full lg:w-[240px] shrink-0 gs-music">
                         <div class="relative group border border-white/10 overflow-hidden shadow-2xl">
-                            <img id="main-catalog-cover" src="https://placehold.co/400x400/1a1a1a/333333?text=Loading..." class="w-full aspect-square object-cover transition-transform duration-500 grayscale group-hover:grayscale-0">
+                            <img id="main-catalog-cover" src="https://placehold.co/400x400/1a1a1a/333333?text=Loading..." class="w-full aspect-square object-cover transition-transform duration-500">
                             <div class="absolute top-2 right-2 bg-rude-red text-white text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest">DIRECT</div>
                         </div>
                         <button onclick="App.playFirstTrack()" class="w-full mt-4 border border-white/20 bg-transparent text-white py-3 font-display text-lg uppercase tracking-widest hover:bg-white hover:text-black transition-all flex justify-center items-center gap-2" data-en="PLAY ALL" data-es="REPRODUCIR TODO">
                             <i class="fa-solid fa-play text-xs"></i> PLAY ALL
                         </button>
                         
-                        <div class="flex justify-center gap-4 mt-5 border-t border-white/5 pt-4">
-                            <a href="#" class="text-gray-500 hover:text-[#1DB954] transition-colors"><i class="fa-brands fa-spotify text-lg"></i></a>
-                            <a href="#" class="text-gray-500 hover:text-white transition-colors"><i class="fa-brands fa-apple text-lg"></i></a>
-                            <a href="#" class="text-gray-500 hover:text-[#ff5500] transition-colors"><i class="fa-brands fa-soundcloud text-lg"></i></a>
+                        <div class="flex justify-center gap-6 mt-5 border-t border-white/5 pt-5">
+                            <a href="#" class="text-[#1DB954] transition-all duration-300 hover:-translate-y-1.5 hover:drop-shadow-[0_0_12px_rgba(29,185,84,0.8)]"><i class="fa-brands fa-spotify text-2xl"></i></a>
+                            <a href="#" class="text-white transition-all duration-300 hover:-translate-y-1.5 hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"><i class="fa-brands fa-apple text-2xl"></i></a>
+                            <a href="#" class="text-[#ff5500] transition-all duration-300 hover:-translate-y-1.5 hover:drop-shadow-[0_0_12px_rgba(255,85,0,0.8)]"><i class="fa-brands fa-soundcloud text-2xl"></i></a>
                         </div>
                     </div>
 
@@ -478,8 +478,10 @@
                 </div>
     
                 <div class="hidden md:flex flex-col items-center w-2/4 max-w-[500px] shrink-0 px-4">
-                    <div class="flex items-center gap-6 text-white mb-1.5">
-                        <button onclick="App.toggleShuffle()" class="text-gray-500 hover:text-white transition"><i id="btn-shuffle" class="fa-solid fa-shuffle text-xs"></i></button>
+                   <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
+                    <button id="fs-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-5 py-2 rounded-full text-white text-sm font-bold shadow-[0_0_15px_rgba(211,47,47,0.5)] flex items-center gap-2 hover:bg-white hover:text-black transition-colors shrink-0 hidden"><i class="fa-solid fa-cart-shopping"></i> <span id="fs-buy-price">BUY</span></button>
+                    
+                    <div class="flex bg-white/10 rounded-full items-center shrink-0">
                         <button onclick="App.prevTrack()" class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-backward-step text-xs"></i></button>
                         <button onclick="App.togglePlay()" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 hover:bg-rude-red hover:text-white transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                             <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
@@ -495,6 +497,8 @@
                 </div>
     
                 <div class="hidden md:flex justify-end items-center gap-4 w-1/4 pr-2">
+                    <button id="desktop-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-3 py-1 rounded text-white text-[10px] font-bold hover:bg-white hover:text-black shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors mr-2 hidden">BUY</button>
+                    
                     <button onclick="App.toggleLike()" class="text-gray-400 hover:text-white transition"><i id="desktop-like-btn" class="fa-regular fa-heart text-sm"></i></button>
                     <button onclick="App.openComments()" class="text-gray-400 hover:text-white transition"><i class="fa-regular fa-comment text-sm"></i></button>
                     <button class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-share-nodes text-sm"></i></button>
@@ -608,6 +612,39 @@
         </div>
     </div>
 
+    <div id="checkout-modal" class="fixed inset-0 z-[400] hidden bg-black/95 backdrop-blur-md flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <button onclick="App.closeCheckout()" class="absolute top-6 right-6 text-white text-2xl hover:text-rude-red transition-colors"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-md bg-[#0a0a0a] border border-white/10 p-6 md:p-8 shadow-[0_0_50px_rgba(211,47,47,0.15)] transform translate-y-10 transition-transform duration-300" id="checkout-panel">
+            <h2 class="font-display text-3xl uppercase text-white mb-2" data-en="SECURE CHECKOUT" data-es="PAGO SEGURO">SECURE CHECKOUT</h2>
+            <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
+                <div class="overflow-hidden">
+                    <p id="co-track-title" class="font-bold text-white text-sm truncate">Track Title</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">HIGH QUALITY WAV / STEMS</p>
+                </div>
+                <span id="co-track-price" class="font-display text-2xl text-rude-red ml-4">$0.00</span>
+            </div>
+            
+            <form id="payment-form" class="space-y-4">
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">EMAIL</label>
+                    <input type="email" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs" placeholder="you@email.com" required>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1" data-en="CARD INFORMATION" data-es="INFORMACIÓN DE TARJETA">CARD INFORMATION</label>
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="MM/YY" maxlength="5" required>
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="CVC" maxlength="4" required>
+                </div>
+                
+                <button type="button" onclick="App.processPayment(this)" class="w-full bg-white text-black font-display text-xl py-3 uppercase tracking-wider hover:bg-rude-red hover:text-white transition-colors mt-6 flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-lock text-sm"></i> <span data-en="PAY NOW" data-es="PAGAR AHORA">PAY NOW</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // URL de tu backend en Cloudflare (Ajusta cuando despliegues el Worker)
         const WORKER_URL = "https://tu-worker-url.workers.dev";
@@ -696,10 +733,10 @@
                                 <h4 class="text-white text-xs font-bold truncate group-hover:text-rude-red transition-colors">${t.title}</h4>
                                 <p class="text-[9px] text-gray-500 truncate uppercase tracking-widest mt-0.5">${t.artist}</p>
                             </div>
-                            <div class="w-16 text-right pr-1">
+                            <div class="w-16 text-right pr-1 flex items-center justify-end">
                                 ${t.isFree 
-                                    ? `<span class="text-[9px] font-bold text-gray-400 group-hover:text-white transition-colors" data-en="FREE" data-es="GRATIS">${lang === 'en'?'FREE':'GRATIS'}</span>` 
-                                    : `<span class="text-[9px] font-bold text-white group-hover:text-rude-red transition-colors">$${t.price}</span>`}
+                                    ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="bg-white/10 hover:bg-white text-gray-300 hover:text-black px-2 py-1 text-[9px] font-bold rounded transition-colors" data-en="FREE" data-es="GRATIS">${lang === 'en'?'FREE':'GRATIS'}</button>` 
+                                    : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="bg-rude-red hover:bg-white text-white hover:text-black px-2 py-1 text-[9px] font-bold rounded shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors">$${t.price}</button>`}
                             </div>
                         </div>
                     `).join('');
@@ -794,6 +831,60 @@
                     modal.classList.add('hidden');
                     modal.classList.remove('flex');
                 }});
+            },
+
+            playFirstTrack() {
+                if (AppState.data.tracks && AppState.data.tracks.length > 0) {
+                    this.loadTrack(AppState.data.tracks[0].id, true);
+                }
+            },
+
+            triggerBuyCurrent() {
+                const track = AppState.data.tracks[AppState.currentTrackIndex];
+                if(track && !track.isFree) this.openCheckout(track.id);
+            },
+
+            openCheckout(trackId) {
+                const track = AppState.data.tracks.find(t => t.id === trackId);
+                if(!track) return;
+                
+                document.getElementById('co-track-title').textContent = track.title;
+                document.getElementById('co-track-price').textContent = `$${track.price}`;
+                
+                const modal = document.getElementById('checkout-modal');
+                const panel = document.getElementById('checkout-panel');
+                modal.classList.remove('hidden'); modal.classList.add('flex');
+                setTimeout(() => { modal.classList.remove('opacity-0'); panel.classList.remove('translate-y-10'); }, 10);
+            },
+
+            closeCheckout() {
+                const modal = document.getElementById('checkout-modal');
+                const panel = document.getElementById('checkout-panel');
+                modal.classList.add('opacity-0'); panel.classList.add('translate-y-10');
+                setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+            },
+
+            processPayment(btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> SUCCESS';
+                    btn.classList.replace('bg-white', 'bg-green-500'); 
+                    btn.classList.replace('text-black', 'text-white');
+                    setTimeout(() => {
+                        document.getElementById('payment-form').reset();
+                        this.closeCheckout();
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                            btn.classList.replace('bg-green-500', 'bg-white'); 
+                            btn.classList.replace('text-white', 'text-black');
+                        }, 300);
+                    }, 1500);
+                }, 1500);
+            },
+            
+            downloadTrack(id) {
+                alert(AppState.currentLang === 'es' ? "Descarga directa iniciada..." : "Direct download started...");
             },
 
             openComments() {
@@ -996,6 +1087,20 @@
                 }
                 // Siempre forzar la vista de Audio al iniciar un track nuevo
                 this.toggleVideoMode(true);
+                // Actualizar botones de compra globales
+                const btnDesktop = document.getElementById('desktop-buy-btn');
+                const btnFS = document.getElementById('fs-buy-btn');
+                const priceSpan = document.getElementById('fs-buy-price');
+                
+                if(track.isFree) {
+                    btnDesktop?.classList.add('hidden');
+                    btnFS?.classList.add('hidden');
+                } else {
+                    btnDesktop?.classList.remove('hidden');
+                    btnFS?.classList.remove('hidden');
+                    if(btnDesktop) btnDesktop.textContent = `$${track.price}`;
+                    if(priceSpan) priceSpan.textContent = `BUY $${track.price}`;
+                }
                 
                 if(autoPlay) {
                     AppState.isPlaying = false; 
