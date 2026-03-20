@@ -306,11 +306,8 @@
                         <div class="flex items-center text-gray-500 text-[9px] font-bold tracking-[0.2em] border-b border-white/10 pb-2 mb-2 px-2 uppercase shrink-0">
                             <div class="w-6 text-center">#</div>
                             <div class="flex-1" data-en="TRACK" data-es="PISTA">TRACK</div>
-                            <div class="w-24 text-right pr-1 flex items-center justify-end">
-                                ${t.isFree 
-                                    ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors p-1 group/btn" title="Free Download"><i class="fa-solid fa-download text-sm group-hover/btn:-translate-y-0.5 transition-transform"></i> <span class="text-[10px] font-bold tracking-wider">FREE</span></button>` 
-                                    : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="flex items-center gap-1.5 text-rude-red hover:text-white transition-colors p-1 group/btn" title="Buy"><i class="fa-solid fa-cart-shopping text-sm group-hover/btn:-translate-y-0.5 transition-transform"></i> <span class="text-[10px] font-bold tracking-wider">$${t.price}</span></button>`}
-                            </div>
+                            <div class="w-24 text-right pr-2" data-en="GET" data-es="OBTENER">GET</div>
+                        </div>
                         <div class="yt-track-list space-y-1 flex-1 overflow-y-auto no-scrollbar pb-2" id="tracklist-container">
                             <div class="text-center py-10 text-gray-500 text-xs font-mono">Syncing vault...</div>
                         </div>
@@ -770,7 +767,7 @@
             renderDynamicContent() {
                 const lang = AppState.currentLang;
 
-                // 1. Tracks (Lista compacta de catálogo con botones minimalistas)
+                // 1. Tracks (Lista compacta de catálogo)
                 const tracklist = document.getElementById('tracklist-container');
                 if(tracklist && AppState.data.tracks) {
                     tracklist.innerHTML = AppState.data.tracks.map((t, i) => `
@@ -784,10 +781,10 @@
                                 <h4 class="text-white text-xs font-bold truncate group-hover:text-rude-red transition-colors">${t.title}</h4>
                                 <p class="text-[9px] text-gray-500 truncate uppercase tracking-widest mt-0.5">${t.artist}</p>
                             </div>
-                            <div class="w-16 text-right pr-1 flex items-center justify-end">
+                            <div class="w-24 text-right pr-1 flex items-center justify-end">
                                 ${t.isFree 
-                                    ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="text-gray-400 hover:text-white transition-colors p-1" title="Free Download"><i class="fa-solid fa-download text-sm"></i></button>` 
-                                    : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="text-rude-red hover:text-white transition-colors p-1" title="Buy"><i class="fa-solid fa-cart-shopping text-sm"></i></button>`}
+                                    ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors p-1 group/btn" title="Free Download"><i class="fa-solid fa-download text-sm group-hover/btn:-translate-y-0.5 transition-transform"></i> <span class="text-[10px] font-bold tracking-wider">FREE</span></button>` 
+                                    : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="flex items-center gap-1.5 text-rude-red hover:text-white transition-colors p-1 group/btn" title="Buy"><i class="fa-solid fa-cart-shopping text-sm group-hover/btn:-translate-y-0.5 transition-transform"></i> <span class="text-[10px] font-bold tracking-wider">$${t.price}</span></button>`}
                             </div>
                         </div>
                     `).join('');
