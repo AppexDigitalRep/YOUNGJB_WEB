@@ -1027,10 +1027,24 @@
                 this.audio.addEventListener('timeupdate', () => {
                     if(this.audio.duration) {
                         const percent = (this.audio.currentTime / this.audio.duration) * 100;
+                        
+                        // Sincronizar el valor (posición de la bolita)
                         progBar.value = percent;
                         fsProgBar.value = percent;
+                        
+                        // --- LA MAGIA DEL GRADIENTE ROJO ---
+                        const filledColor = '#d32f2f'; // El rojo de tu tema (rude-red)
+                        const unfilledColorPC = '#1f2937'; // Gris oscuro para PC
+                        const unfilledColorMobile = '#4b5563'; // Gris un poco más claro para Móvil
+                        
+                        // Aplicar el gradiente dinámico a las barras
+                        progBar.style.background = `linear-gradient(to right, ${filledColor} 0%, ${filledColor} ${percent}%, ${unfilledColorPC} ${percent}%, ${unfilledColorPC} 100%)`;
+                        fsProgBar.style.background = `linear-gradient(to right, ${filledColor} 0%, ${filledColor} ${percent}%, ${unfilledColorMobile} ${percent}%, ${unfilledColorMobile} 100%)`;
+
+                        // Barra minimalista de la vista móvil reducida
                         mobileProgFill.style.width = `${percent}%`;
                         
+                        // Textos de tiempo
                         const curTime = this.formatTime(this.audio.currentTime);
                         const totTime = this.formatTime(this.audio.duration);
                         
@@ -1050,7 +1064,16 @@
                     this.nextTrack();
                 });
 
-                const seek = (e) => { if(this.audio.duration) this.audio.currentTime = (e.target.value / 100) * this.audio.duration; };
+                const seek = (e) => { 
+                    if(this.audio.duration) {
+                        this.audio.currentTime = (e.target.value / 100) * this.audio.duration; 
+                        // Actualizar el gradiente inmediatamente al arrastrar la barra
+                        const percent = e.target.value;
+                        const filledColor = '#d32f2f';
+                        e.target.style.background = `linear-gradient(to right, ${filledColor} 0%, ${filledColor} ${percent}%, #1f2937 ${percent}%, #1f2937 100%)`;
+                    }
+                };
+                
                 progBar.addEventListener('input', seek);
                 fsProgBar.addEventListener('input', seek);
             },
