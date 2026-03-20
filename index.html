@@ -494,7 +494,9 @@
                 </div>
 
                 <div class="hidden md:flex justify-end items-center gap-4 w-1/4 pr-2">
-                    <button id="desktop-buy-btn" onclick="event.stopPropagation(); App.triggerBuyCurrent()" class="bg-rude-red px-3 py-1 rounded text-white text-[10px] font-bold hover:bg-white hover:text-black shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors shrink-0 hidden">BUY</button>
+                    <button id="desktop-buy-btn" onclick="event.stopPropagation(); App.triggerBuyCurrent()" class="text-gray-400 hover:text-white transition shrink-0 hidden" title="Get Track">
+                        <i id="desktop-buy-icon" class="fa-solid fa-cart-shopping text-sm"></i>
+                    </button>
                     <button onclick="event.stopPropagation(); App.toggleLike()" class="text-gray-400 hover:text-white transition shrink-0"><i id="desktop-like-btn" class="fa-regular fa-heart text-sm"></i></button>
                     <button onclick="event.stopPropagation(); App.openComments()" class="text-gray-400 hover:text-white transition shrink-0"><i class="fa-regular fa-comment text-sm"></i></button>
                     <button onclick="event.stopPropagation();" class="text-gray-400 hover:text-white transition shrink-0"><i class="fa-solid fa-share-nodes text-sm"></i></button>
@@ -536,8 +538,9 @@
                 </div>
 
                 <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
-                    <button id="fs-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-5 py-2 rounded-full text-white text-sm font-bold shadow-[0_0_15px_rgba(211,47,47,0.5)] flex items-center gap-2 hover:bg-white hover:text-black transition-colors shrink-0 hidden"><i class="fa-solid fa-cart-shopping"></i> <span id="fs-buy-price">BUY</span></button>
-                    
+                    <button id="fs-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0 hidden">
+                        <i id="fs-buy-icon" class="fa-solid fa-cart-shopping"></i> <span id="fs-buy-price">Buy</span>
+                    </button>
                     <div class="flex bg-white/10 rounded-full items-center shrink-0">
                         <button onclick="App.toggleLike()" class="px-4 py-2 text-white border-r border-white/10 hover:bg-white/5 rounded-l-full transition-colors text-sm"><i id="fs-like-btn" class="fa-regular fa-heart mr-1.5"></i> Like</button>
                         <button class="px-4 py-2 text-white hover:bg-white/5 rounded-r-full transition-colors text-sm"><i class="fa-regular fa-thumbs-down"></i></button>
@@ -870,6 +873,7 @@
             triggerBuyCurrent() {
                 const track = AppState.data.tracks[AppState.currentTrackIndex];
                 if(track && !track.isFree) this.openCheckout(track.id);
+                else if (track && track.isFree) this.downloadTrack(track.id);
             },
 
             openCheckout(trackId) {
@@ -1115,21 +1119,26 @@
                 }
                 // Siempre forzar la vista de Audio al iniciar un track nuevo
                 this.toggleVideoMode(true);
-                // Actualizar botones de compra globales
+                
+                // Actualizar botones de compra globales (Modo Iconos)
                 const btnDesktop = document.getElementById('desktop-buy-btn');
+                const iconDesktop = document.getElementById('desktop-buy-icon');
                 const btnFS = document.getElementById('fs-buy-btn');
+                const iconFS = document.getElementById('fs-buy-icon');
                 const priceSpan = document.getElementById('fs-buy-price');
                 
+                btnDesktop?.classList.remove('hidden');
+                btnFS?.classList.remove('hidden');
+
                 if(track.isFree) {
-                    btnDesktop?.classList.add('hidden');
-                    btnFS?.classList.add('hidden');
+                    if(iconDesktop) iconDesktop.className = 'fa-solid fa-download text-sm';
+                    if(iconFS) iconFS.className = 'fa-solid fa-download';
+                    if(priceSpan) priceSpan.textContent = AppState.currentLang === 'en' ? 'Free DL' : 'Descargar';
                 } else {
-                    btnDesktop?.classList.remove('hidden');
-                    btnFS?.classList.remove('hidden');
-                    if(btnDesktop) btnDesktop.textContent = `$${track.price}`;
-                    if(priceSpan) priceSpan.textContent = `BUY $${track.price}`;
+                    if(iconDesktop) iconDesktop.className = 'fa-solid fa-cart-shopping text-sm';
+                    if(iconFS) iconFS.className = 'fa-solid fa-cart-shopping';
+                    if(priceSpan) priceSpan.textContent = AppState.currentLang === 'en' ? 'Buy' : 'Comprar';
                 }
-                
                 if(autoPlay) {
                     AppState.isPlaying = false; 
                     this.togglePlay();
