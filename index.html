@@ -761,97 +761,104 @@
 
             renderDynamicContent() {
                 const lang = AppState.currentLang;
-
-                // 1. Tracks (Lista compacta de catálogo)
-                const tracklist = document.getElementById('tracklist-container');
-                if(tracklist && AppState.data.tracks) {
-                    tracklist.innerHTML = AppState.data.tracks.map((t, i) => `
-                        <div class="yt-track-item flex items-center py-1.5 px-2 sharp-border border border-transparent cursor-pointer transition-colors group" onclick="App.loadTrack('${t.id}')">
-                            <div class="w-6 text-center text-gray-500 text-[10px] font-mono font-bold group-hover:text-white transition-colors">
-                                <span class="track-num">${i + 1}</span>
-                                <i class="fa-solid fa-play track-play text-[10px] text-rude-red"></i>
-                            </div>
-                            <img src="${t.coverUrl}" class="w-8 h-8 object-cover ml-2 grayscale group-hover:grayscale-0 transition-all">
-                            <div class="flex-1 overflow-hidden ml-3">
-                                <h4 class="text-white text-xs font-bold truncate group-hover:text-rude-red transition-colors">${t.title}</h4>
-                                <p class="text-[9px] text-gray-500 truncate uppercase tracking-widest mt-0.5">${t.artist}</p>
-                            </div>
-                            <div class="w-16 text-right pr-1 flex items-center justify-end">
-                                ${t.isFree 
-                                    ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="bg-white/10 hover:bg-white text-gray-300 hover:text-black px-2 py-1 text-[9px] font-bold rounded transition-colors" data-en="FREE" data-es="GRATIS">${lang === 'en'?'FREE':'GRATIS'}</button>` 
-                                    : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="bg-rude-red hover:bg-white text-white hover:text-black px-2 py-1 text-[9px] font-bold rounded shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors">$${t.price}</button>`}
-                            </div>
-                        </div>
-                    `).join('');
-
-                    if(AppState.data.tracks.length > 0) {
-                        const mainCover = document.getElementById('main-catalog-cover');
-                        if (mainCover) mainCover.src = AppState.data.tracks[0].coverUrl;
-                    }
-                }
-
-                // 2. Cursos (Brutalistas)
-                const coursesContainer = document.getElementById('courses-container');
-                if(coursesContainer && AppState.data.courses) {
-                    coursesContainer.innerHTML = AppState.data.courses.map(c => `
-                        <div onclick="App.openCourseModal('${c.id}')" class="sharp-border border border-white/10 bg-black flex flex-col group ${c.isAvailable ? 'cursor-pointer hover:border-rude-red/50' : 'opacity-60 relative'} transition-all duration-500">
-                            <div class="relative h-48 overflow-hidden">
-                                ${!c.isAvailable ? `<div class="absolute inset-0 bg-black/80 z-10 flex items-center justify-center backdrop-blur-sm"><i class="fa-solid fa-lock text-3xl text-gray-600 drop-shadow-lg"></i></div>` : ''}
-                                <img src="${c.imageUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition duration-700">
-                                <h3 class="absolute bottom-3 left-3 font-display text-2xl text-white uppercase tracking-wide bg-black px-2 py-0.5 leading-none mix-blend-difference">${c.title}</h3>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-
-                // 3. Tour
-                const tourContainer = document.getElementById('tour-container');
-                if(tourContainer && AppState.data.tour) {
-                    const monthNames = { 'en': ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'], 'es': ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'] };
-                    tourContainer.innerHTML = AppState.data.tour.map(d => {
-                        const dateObj = new Date(d.date + 'T12:00:00');
-                        const month = monthNames[lang][dateObj.getMonth()];
-                        const day = String(dateObj.getDate()).padStart(2, '0');
+                const view = document.getElementById('view-music');
+                
+                // === AJUSTE DE ESTRUCTURA MAESTRA (ESCRITORIO NO-SCROLL) ===
+                // Cambiamos clases: 'h-full flex-col md:flex-row md:items-stretch md:overflow-hidden gap-8 md:gap-12'
+                // Esto bloquea el scroll de la página y divide en 2 columnas perfectas que encajan en el visor.
+                view.innerHTML = `
+                    <div class="p-4 md:p-6 lg:p-10 max-w-7xl mx-auto h-full flex flex-col md:flex-row md:items-stretch md:overflow-hidden gap-8 md:gap-12 pb-[250px] md:pb-6">
                         
-                        return `
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 border-b border-white/10 last:border-0 ${d.isSoldOut ? 'bg-white/5 opacity-50' : 'hover:bg-white/5 transition-colors group'}">
-                            <div class="flex items-center gap-4 mb-3 sm:mb-0">
-                                <div class="text-center w-12 shrink-0">
-                                    <p class="text-[10px] ${d.isSoldOut ? 'text-gray-500' : 'text-rude-red'} font-bold uppercase tracking-widest">${month}</p>
-                                    <p class="font-display text-3xl ${d.isSoldOut ? 'text-gray-500' : 'text-white group-hover:text-rude-red'} transition-colors leading-none">${day}</p>
-                                </div>
-                                <div class="pl-4 border-l border-white/10">
-                                    <h4 class="text-base font-display uppercase tracking-wide leading-tight text-white">${d.title}</h4>
-                                    <p class="text-gray-500 font-mono text-[9px] mt-0.5"><i class="fa-solid fa-location-dot ${d.isSoldOut ? '' : 'text-rude-yellow'} mr-1"></i> ${d.location}</p>
-                                </div>
+                        <div class="w-full md:w-[320px] lg:w-[380px] md:shrink-0 md:flex md:flex-col md:justify-center md:min-h-0">
+                            
+                            <div class="relative group border border-white/5 overflow-hidden rounded-2xl bg-[#030303] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.8)] transition-all duration-500 hover:border-rude-red/20 hover:shadow-[0_20px_60px_rgba(211,47,47,0.15)] mx-auto md:mx-0 max-w-sm md:max-w-none gs-music-left opacity-0 translate-y-8">
+                                <div class="absolute inset-x-0 -top-20 h-40 bg-rude-red rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+                                
+                                <img id="main-catalog-cover" src="${AppState.data.tracks[0]?.coverUrl || 'https://placehold.co/400x400/000/333?text=JB'}" class="w-full aspect-square object-cover rounded-lg relative z-10 transition-transform duration-700 group-hover:scale-105">
+                                
+                                <div class="absolute top-6 right-6 bg-rude-red text-white text-[8px] font-bold px-2 py-0.5 uppercase tracking-widest z-20 rounded-sm">DIRECT</div>
                             </div>
-                            <button ${d.isSoldOut ? 'disabled' : ''} class="w-full sm:w-auto text-[10px] font-bold uppercase tracking-widest transition-colors ${d.isSoldOut ? 'text-gray-600' : 'text-white group-hover:text-rude-red'}" data-en="${d.isSoldOut ? 'SOLD OUT' : 'TICKETS'}" data-es="${d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS'}">${lang === 'en' ? (d.isSoldOut ? 'SOLD OUT' : 'TICKETS') : (d.isSoldOut ? 'SOLD OUT' : 'ENTRADAS')}</button>
-                        </div>`;
-                    }).join('');
-                }
 
-                // 4. Galería (Bordes cuadrados, neon)
-                const galleryContainer = document.getElementById('gallery-container');
-                if(galleryContainer && AppState.data.gallery) {
-                    galleryContainer.innerHTML = AppState.data.gallery.map(g => `
-                        <div class="masonry-item sharp-border border border-white/5 group relative overflow-hidden bg-black cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(211,47,47,0.3)] transition-all">
-                            <img src="${g.imageUrl}" class="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-500">
-                            ${g.type === 'shop' 
-                                ? `<div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-3">
-                                    <p class="font-display text-lg text-white mb-2 tracking-widest uppercase">${g.title}</p>
-                                    <button class="border border-white text-white px-3 py-1 font-bold text-[9px] uppercase tracking-widest hover:bg-white hover:text-black transition-colors" data-en="SHOP" data-es="COMPRAR">${lang === 'en' ? 'SHOP' : 'COMPRAR'}</button>
-                                   </div>`
-                                : `<div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                    <p class="font-display text-xl tracking-widest text-white transform translate-y-2 group-hover:translate-y-0 transition-transform">${g.title}</p>
-                                   </div>`
-                            }
+                            <button onclick="App.playFirstTrack()" class="w-full mt-6 relative py-3.5 px-6 rounded-xl bg-gradient-to-b from-rude-yellow to-[#eab308] text-black font-body font-bold text-xs uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(250,204,21,0.2)] hover:shadow-[0_0_35px_rgba(250,204,21,0.6)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group border border-[#fef08a]/60 overflow-hidden gs-music-left opacity-0 translate-y-8">
+                                <div class="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <i class="fa-solid fa-play relative z-10 text-[10px] group-hover:scale-110 transition-transform duration-300"></i> 
+                                <span class="relative z-10" data-en="PLAY ALL" data-es="REPRODUCIR TODO">${lang === 'en' ? 'PLAY ALL' : 'REPRODUCIR TODO'}</span>
+                            </button>
+                            
+                            <div class="flex justify-center gap-6 mt-6 border-t border-white/5 pt-6 gs-music-left opacity-0 translate-y-8">
+                                <a href="#" class="text-[#1DB954] transition-all duration-300 hover:-translate-y-1 hover:drop-shadow-[0_0_10px_rgba(29,185,84,0.8)]"><i class="fa-brands fa-spotify text-2xl"></i></a>
+                                <a href="#" class="text-white transition-all duration-300 hover:-translate-y-1 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"><i class="fa-brands fa-apple text-2xl"></i></a>
+                                <a href="#" class="text-[#ff5500] transition-all duration-300 hover:-translate-y-1 hover:drop-shadow-[0_0_10px_rgba(255,85,0,0.8)]"><i class="fa-brands fa-soundcloud text-2xl"></i></a>
+                            </div>
                         </div>
-                    `).join('');
-                }
 
-                this.updateUITexts();
+                        <div class="flex-1 md:min-w-0 md:flex md:flex-col md:justify-center md:pl-6 gs-music-right opacity-0 translate-y-8">
+                            <h2 class="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.85] text-white uppercase tracking-tighter m-0">${AppState.data.albumTitle}</h2>
+                            <p class="font-body text-xs md:text-sm text-gray-400 font-light mt-5 leading-relaxed max-w-2xl">${AppState.data.albumDesc}</p>
+                            
+                            <div class="w-full mt-10 md:mt-8 flex-1 md:min-h-0 md:flex md:flex-col">
+                                <div class="flex items-center text-gray-600 text-[10px] font-bold uppercase tracking-widest pb-3 px-3 border-b border-white/5">
+                                    <div class="w-8 text-center">#</div>
+                                    <div class="flex-1 ml-3">${lang === 'en' ? 'TITLE' : 'TÍTULO'}</div>
+                                    <div class="w-20 text-right">${lang === 'en' ? 'DURATION' : 'DURACIÓN'}</div>
+                                    <div class="w-24 text-right">${lang === 'en' ? 'GET' : 'OBTENER'}</div>
+                                
+                                </div>
+                                
+                                <div class="w-full space-y-1 md:overflow-y-auto md:flex-1 no-scrollbar pt-2 pr-1 md:pr-2" id="tracklist-container">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // === RENDERIZAR TRACKS CON DISEÑO MINIMALISTA Y ELEVADO ===
+                const tracklistContainer = document.getElementById('tracklist-container');
+                tracklistContainer.innerHTML = '';
+                AppState.data.tracks.forEach((t, i) => {
+                    const item = document.createElement('div');
+                    // Diseño minimalista: border invisible que se enciende en hover, esquinas sutiles (sharp-border)
+                    item.className = `yt-track-item flex items-center py-2.5 px-3 sharp-border border border-transparent cursor-pointer transition-colors duration-300 group hover:border-white/5 hover:bg-white/[0.02]`;
+                    item.onclick = () => App.loadTrack(t.id);
+                    
+                    item.innerHTML = `
+                        <div class="w-8 text-center text-gray-500 text-[10px] font-mono font-bold group-hover:text-white transition-colors relative">
+                            <span class="track-num">${i + 1}</span>
+                            <i class="fa-solid fa-play track-play text-[9px] text-rude-red absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        </div>
+                        
+                        <img src="${t.coverUrl}" class="w-9 h-9 object-cover ml-3 rounded-sm transition-transform duration-500 group-hover:scale-105">
+                        
+                        <div class="flex-1 overflow-hidden ml-4">
+                            <h4 class="text-white text-xs font-semibold truncate transition-colors group-hover:text-rude-red">${t.title}</h4>
+                            <p class="text-[9px] text-gray-500 truncate uppercase tracking-widest mt-0.5 group-hover:text-gray-300 transition-colors">${t.artist}</p>
+                        </div>
+                        
+                        <div class="w-20 text-right pr-3 text-gray-500 text-[10px] font-mono group-hover:text-white transition-colors">
+                            ${t.duration}
+                        </div>
+
+                        <div class="w-24 text-right flex items-center justify-end">
+                            ${t.isFree 
+                                ? `<button onclick="event.stopPropagation(); App.downloadTrack('${t.id}')" class="bg-white/5 hover:bg-white text-gray-300 hover:text-black px-2.5 py-1 text-[9px] font-bold rounded transition-colors" data-en="FREE DL" data-es="DESCARGA">${lang === 'en'?'FREE DL':'DESCARGA'}</button>` 
+                                : `<button onclick="event.stopPropagation(); App.openCheckout('${t.id}')" class="bg-rude-red hover:bg-white text-white hover:text-black px-3 py-1.5 text-[9px] font-bold rounded shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors group-hover:shadow-[0_0_15px_rgba(211,47,47,0.6)] group-hover:scale-105">$${t.price}</button>`}
+                        </div>
+                    `;
+                    tracklistContainer.appendChild(item);
+                });
+
+                // === ANIMACIONES MAESTRAS (GSAP) ===
+                setTimeout(() => {
+                    gsap.fromTo('.gs-music-left', 
+                        { opacity: 0, y: 30 }, 
+                        { opacity: 1, y: 0, stagger: 0.15, duration: 1, ease: 'power3.out' }
+                    );
+                    gsap.fromTo('.gs-music-right', 
+                        { opacity: 0, y: 30 }, 
+                        { opacity: 1, y: 0, delay: 0.3, duration: 1, ease: 'power3.out' }
+                    );
+                }, 100);
             },
-
             // --- Modales ---
             openCourseModal(id) {
                 const course = AppState.data.courses.find(c => c.id === id);
