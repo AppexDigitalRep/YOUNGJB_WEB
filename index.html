@@ -449,14 +449,13 @@
 
     <div class="fixed bottom-4 left-0 right-0 z-50 flex justify-center pointer-events-none px-2 md:pl-[14rem]">
        <div id="global-player" class="fixed z-[45] flex justify-center transition-transform duration-700 ease-out transform translate-y-[200%] bottom-[65px] left-0 right-0 md:bottom-6 md:left-[240px] md:right-8 pointer-events-none">
-        
-            <div class="pointer-events-auto w-full max-w-[1200px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
+           <div class="pointer-events-auto w-full max-w-[1200px] flex items-center justify-between bg-[#0a0a0a] md:bg-black/90 md:backdrop-blur-xl border-t md:border border-white/10 md:border-white/20 md:rounded-full p-2 md:p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.8)] md:shadow-[0_10px_40px_rgba(0,0,0,0.8)] relative cursor-pointer md:cursor-default" onclick="App.openFullPlayer(event)">
                 <audio id="audio-engine" src="" preload="auto"></audio>
-    
+                
                 <div class="absolute top-0 left-0 w-full h-[2px] bg-gray-800 md:hidden">
                     <div id="mobile-progress-fill" class="h-full bg-rude-red w-0 relative transition-all duration-75"></div>
                 </div>
-    
+                
                 <div class="flex items-center gap-3 w-auto md:w-1/4 min-w-[120px] pl-1 md:pl-2">
                     <div class="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full overflow-hidden border border-white/10 md:border-white/20">
                         <img id="player-cover" src="https://placehold.co/100x100/000/333?text=JB" class="w-full h-full object-cover spin-slow spin-paused">
@@ -467,7 +466,7 @@
                         <p id="player-artist" class="text-[10px] md:text-[8px] text-gray-400 font-bold truncate uppercase tracking-widest mt-0.5">YOUNG J.B</p>
                     </div>
                 </div>
-    
+
                 <div class="flex md:hidden items-center gap-4 pr-3" onclick="event.stopPropagation();">
                     <button onclick="App.toggleLike()" class="text-gray-400 hover:text-white transition"><i id="mobile-like-btn" class="fa-regular fa-heart text-sm"></i></button>
                     <button onclick="App.prevTrack()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-backward-step text-sm"></i></button>
@@ -476,12 +475,10 @@
                     </button>
                     <button onclick="App.nextTrack()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-forward-step text-sm"></i></button>
                 </div>
-    
+
                 <div class="hidden md:flex flex-col items-center w-2/4 max-w-[500px] shrink-0 px-4">
-                   <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
-                    <button id="fs-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-5 py-2 rounded-full text-white text-sm font-bold shadow-[0_0_15px_rgba(211,47,47,0.5)] flex items-center gap-2 hover:bg-white hover:text-black transition-colors shrink-0 hidden"><i class="fa-solid fa-cart-shopping"></i> <span id="fs-buy-price">BUY</span></button>
-                    
-                    <div class="flex bg-white/10 rounded-full items-center shrink-0">
+                    <div class="flex items-center gap-6 text-white mb-1.5">
+                        <button onclick="App.toggleShuffle()" class="text-gray-500 hover:text-white transition"><i id="btn-shuffle" class="fa-solid fa-shuffle text-xs"></i></button>
                         <button onclick="App.prevTrack()" class="text-gray-500 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-backward-step text-xs"></i></button>
                         <button onclick="App.togglePlay()" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 hover:bg-rude-red hover:text-white transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                             <i class="fa-solid fa-play ml-0.5 text-[10px]" id="play-icon"></i>
@@ -495,22 +492,20 @@
                         <span id="time-total">--:--</span>
                     </div>
                 </div>
-    
+
                 <div class="hidden md:flex justify-end items-center gap-4 w-1/4 pr-2">
-                    <button id="desktop-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-3 py-1 rounded text-white text-[10px] font-bold hover:bg-white hover:text-black shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors mr-2 hidden">BUY</button>
-                    
-                    <button onclick="App.toggleLike()" class="text-gray-400 hover:text-white transition"><i id="desktop-like-btn" class="fa-regular fa-heart text-sm"></i></button>
-                    <button onclick="App.openComments()" class="text-gray-400 hover:text-white transition"><i class="fa-regular fa-comment text-sm"></i></button>
-                    <button class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-share-nodes text-sm"></i></button>
-                    <div class="w-px h-4 bg-white/20 mx-1"></div>
-                    <i class="fa-solid fa-volume-low text-gray-500 text-[10px]"></i>
-                    <input type="range" id="volume-bar" value="80" max="100" class="w-16 red-accent h-1 cursor-pointer bg-gray-800 rounded-full transition-all">
+                    <button id="desktop-buy-btn" onclick="event.stopPropagation(); App.triggerBuyCurrent()" class="bg-rude-red px-3 py-1 rounded text-white text-[10px] font-bold hover:bg-white hover:text-black shadow-[0_0_10px_rgba(211,47,47,0.4)] transition-colors shrink-0 hidden">BUY</button>
+                    <button onclick="event.stopPropagation(); App.toggleLike()" class="text-gray-400 hover:text-white transition shrink-0"><i id="desktop-like-btn" class="fa-regular fa-heart text-sm"></i></button>
+                    <button onclick="event.stopPropagation(); App.openComments()" class="text-gray-400 hover:text-white transition shrink-0"><i class="fa-regular fa-comment text-sm"></i></button>
+                    <button onclick="event.stopPropagation();" class="text-gray-400 hover:text-white transition shrink-0"><i class="fa-solid fa-share-nodes text-sm"></i></button>
+                    <div class="w-px h-4 bg-white/20 mx-1 shrink-0"></div>
+                    <i class="fa-solid fa-volume-low text-gray-500 text-[10px] shrink-0"></i>
+                    <input type="range" id="volume-bar" value="80" max="100" onclick="event.stopPropagation();" class="w-16 red-accent h-1 cursor-pointer bg-gray-800 rounded-full transition-all shrink-0">
                 </div>
-            </div>
-        </div>
-    
-        <div id="full-player" class="pointer-events-auto fixed inset-0 z-[200] bg-[#050505] flex-col pt-6 pb-8 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden overflow-hidden">
-        
+           </div>
+       </div>
+
+       <div id="full-player" class="pointer-events-auto fixed inset-0 z-[200] bg-[#050505] flex-col pt-6 pb-8 px-6 transform translate-y-full transition-transform duration-500 ease-out md:hidden hidden overflow-hidden">
             <div class="flex justify-between items-center mb-6 shrink-0">
                 <button onclick="App.closeFullPlayer()" class="text-white text-2xl p-2 -ml-2"><i class="fa-solid fa-chevron-down"></i></button>
                 <div class="bg-white/10 rounded-full flex text-[10px] font-bold uppercase tracking-wider p-1 cursor-pointer" onclick="App.toggleVideoMode()">
@@ -521,7 +516,7 @@
                     <button class="text-white text-lg p-2 -mr-2"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                 </div>
             </div>
-    
+
             <div class="w-full flex-1 min-h-0 flex items-center justify-center mb-6 shrink relative">
                 <div id="fs-vinyl-container" class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-white/10 shadow-[0_0_50px_rgba(211,47,47,0.2)] transition-opacity duration-300">
                     <img id="fs-player-cover" src="https://placehold.co/500x500/000/333?text=JB" class="w-full h-full object-cover spin-slow spin-paused">
@@ -531,7 +526,7 @@
                     <iframe id="fs-yt-iframe" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
             </div>
-    
+
             <div class="flex flex-col shrink-0 mb-6">
                 <div class="flex justify-between items-center mb-5">
                     <div class="overflow-hidden pr-4 flex-1">
@@ -539,8 +534,10 @@
                         <p id="fs-player-artist" class="text-sm text-gray-400 font-medium truncate mt-0.5">YOUNG J.B</p>
                     </div>
                 </div>
-    
+
                 <div class="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
+                    <button id="fs-buy-btn" onclick="App.triggerBuyCurrent()" class="bg-rude-red px-5 py-2 rounded-full text-white text-sm font-bold shadow-[0_0_15px_rgba(211,47,47,0.5)] flex items-center gap-2 hover:bg-white hover:text-black transition-colors shrink-0 hidden"><i class="fa-solid fa-cart-shopping"></i> <span id="fs-buy-price">BUY</span></button>
+                    
                     <div class="flex bg-white/10 rounded-full items-center shrink-0">
                         <button onclick="App.toggleLike()" class="px-4 py-2 text-white border-r border-white/10 hover:bg-white/5 rounded-l-full transition-colors text-sm"><i id="fs-like-btn" class="fa-regular fa-heart mr-1.5"></i> Like</button>
                         <button class="px-4 py-2 text-white hover:bg-white/5 rounded-r-full transition-colors text-sm"><i class="fa-regular fa-thumbs-down"></i></button>
@@ -549,7 +546,7 @@
                     <button class="bg-white/10 px-4 py-2 rounded-full text-white text-sm font-semibold flex items-center gap-2 hover:bg-white/5 transition-colors shrink-0"><i class="fa-solid fa-share"></i> Share</button>
                 </div>
             </div>
-    
+
             <div class="w-full shrink-0 mb-6 mt-auto">
                 <input type="range" id="fs-progress-bar" value="0" max="100" class="w-full red-accent h-1.5 cursor-pointer bg-gray-600 rounded-full transition-all">
                 <div class="flex justify-between text-[11px] text-gray-400 font-mono mt-3 px-1">
@@ -557,7 +554,7 @@
                     <span id="fs-time-total">--:--</span>
                 </div>
             </div>
-    
+
             <div class="flex justify-between items-center px-2 shrink-0 mb-2">
                 <button onclick="App.toggleShuffle()" class="text-gray-400 text-xl transition-colors"><i id="fs-btn-shuffle" class="fa-solid fa-shuffle"></i></button>
                 <button onclick="App.prevTrack()" class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-backward-step"></i></button>
@@ -567,9 +564,9 @@
                 <button onclick="App.nextTrack()" class="text-white text-3xl hover:text-gray-300 transition-colors"><i class="fa-solid fa-forward-step"></i></button>
                 <button onclick="App.toggleRepeat()" class="text-gray-400 text-xl transition-colors"><i id="fs-btn-repeat" class="fa-solid fa-repeat"></i></button>
             </div>
-        </div>
-    
-        <div id="comments-modal" class="pointer-events-auto fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300" onclick="if(event.target === this) App.closeComments()">
+       </div>
+
+       <div id="comments-modal" class="pointer-events-auto fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden flex-col justify-end opacity-0 transition-opacity duration-300" onclick="if(event.target === this) App.closeComments()">
             <div class="bg-[#111] w-full h-[70vh] rounded-t-3xl border-t border-white/10 flex flex-col transform translate-y-full transition-transform duration-300 ease-out" id="comments-sheet" onclick="event.stopPropagation()">
                 <div class="flex justify-between items-center p-5 border-b border-white/5 shrink-0">
                     <h3 class="text-white font-display text-xl tracking-wide uppercase">Comments</h3>
@@ -591,6 +588,37 @@
                     <button onclick="App.addComment()" class="bg-white text-black px-4 rounded-full font-bold hover:bg-gray-200 transition shrink-0"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
+       </div>
+    </div> <div id="checkout-modal" class="fixed inset-0 z-[9999] hidden bg-black/95 backdrop-blur-md flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <button onclick="App.closeCheckout()" class="absolute top-6 right-6 text-white text-2xl hover:text-rude-red transition-colors"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-md bg-[#0a0a0a] border border-white/10 p-6 md:p-8 shadow-[0_0_50px_rgba(211,47,47,0.15)] transform translate-y-10 transition-transform duration-300" id="checkout-panel">
+            <h2 class="font-display text-3xl uppercase text-white mb-2" data-en="SECURE CHECKOUT" data-es="PAGO SEGURO">SECURE CHECKOUT</h2>
+            <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
+                <div class="overflow-hidden">
+                    <p id="co-track-title" class="font-bold text-white text-sm truncate">Track Title</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">HIGH QUALITY WAV / STEMS</p>
+                </div>
+                <span id="co-track-price" class="font-display text-2xl text-rude-red ml-4">$0.00</span>
+            </div>
+            
+            <form id="payment-form" class="space-y-4">
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1">EMAIL</label>
+                    <input type="email" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs" placeholder="you@email.com" required>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-1" data-en="CARD INFORMATION" data-es="INFORMACIÓN DE TARJETA">CARD INFORMATION</label>
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="MM/YY" maxlength="5" required>
+                    <input type="text" class="w-full bg-black border border-white/20 p-2.5 text-white focus:outline-none focus:border-rude-red text-xs font-mono" placeholder="CVC" maxlength="4" required>
+                </div>
+                
+                <button type="button" onclick="App.processPayment(this)" class="w-full bg-white text-black font-display text-xl py-3 uppercase tracking-wider hover:bg-rude-red hover:text-white transition-colors mt-6 flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-lock text-sm"></i> <span data-en="PAY NOW" data-es="PAGAR AHORA">PAY NOW</span>
+                </button>
+            </form>
         </div>
     </div>
 
